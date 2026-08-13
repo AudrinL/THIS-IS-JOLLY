@@ -1,0 +1,317 @@
+@import 'tailwindcss';
+
+/*
+  Palette read off the film itself, not invented.
+
+  The entire walkthrough is shot at dusk and after dark: warm tungsten interiors
+  (tour-map records accentColor #fff3cf on several spaces) against a deep
+  blue-black night, with the lap pool as the one cold accent (#102ac1 on s01).
+  So the site is dark. The architecture is the only bright thing on the page.
+*/
+@theme {
+  /* ground */
+  --color-void: #05070c;
+  --color-night: #090d16;
+  --color-dusk: #121828;
+  --color-horizon: #232c44;
+
+  /* light — warm, from the tungsten interiors */
+  --color-champagne: #fff3cf;
+  --color-linen: #f2e9d8;
+  --color-bone: #cdc4b4;
+  --color-ash: #8b8578;
+
+  /* the architecture itself */
+  --color-chalk: #f7f8fa;
+
+  /* the pool */
+  --color-pool: #1e3fd8;
+
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-editorial: var(--font-instrument), ui-serif, Georgia, serif;
+
+  --ease-cinema: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-frame: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    /* Lenis drives scrolling; native smooth scrolling would fight it. */
+    scroll-behavior: auto;
+  }
+
+  body {
+    background: var(--color-void);
+    color: var(--color-linen);
+    font-family: var(--font-display);
+    font-feature-settings: 'ss01', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-champagne);
+    color: var(--color-void);
+  }
+
+  /* Lenis */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  /*
+    ------------------------------------------------------------------
+    Liquid glass
+    ------------------------------------------------------------------
+    Built in layers, because that is how real glass reads:
+
+      lg-backdrop  the body of the pane — blur and saturation
+      lg-edge      rim refraction, an SVG displacement masked to the border band
+      lg-tint      a faint cool body colour, denser at the bottom
+      lg-specular  a soft highlight that follows the pointer
+      lg-bead      droplets sitting on the surface, each with its own shading
+      lg-rim       the lit top edge and shaded bottom edge that give it thickness
+
+    The rim is what sells it. Blur alone reads as frosted plastic; a bright
+    upper edge, a dark lower edge and distortion concentrated at the border read
+    as a solid object with depth.
+  */
+  .lg {
+    position: relative;
+    isolation: isolate;
+    border-radius: var(--lg-radius, 22px);
+    /* The phone value, now used everywhere — see the note further down. */
+    --lg-blur: 11px;
+    box-shadow:
+      0 26px 70px -28px rgb(0 0 0 / 0.78),
+      0 2px 10px -4px rgb(0 0 0 / 0.5);
+  }
+
+  .lg > * {
+    border-radius: inherit;
+  }
+
+  .lg-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* Vendor prefixes are left to Lightning CSS. Writing -webkit- duplicates by
+     hand makes it drop the standard property, which breaks Firefox. */
+  .lg-backdrop {
+    backdrop-filter: blur(var(--lg-blur, 16px)) saturate(var(--lg-sat, 165%))
+      brightness(1.06);
+  }
+
+  /* Rim refraction. Masked so only a band around the border is displaced. */
+  .lg-edge {
+    backdrop-filter: blur(1px);
+    mask-image: radial-gradient(
+      120% 120% at 50% 50%,
+      transparent 52%,
+      black 78%,
+      black 100%
+    );
+    opacity: 0.9;
+  }
+
+  @supports (backdrop-filter: url('#lg-refract')) {
+    .lg-edge {
+      backdrop-filter: blur(1px) url('#lg-refract');
+    }
+    .lg-soft .lg-edge {
+      backdrop-filter: blur(1px) url('#lg-refract-soft');
+    }
+  }
+
+  .lg-tint {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-void) 18%, transparent) 0%,
+      color-mix(in oklab, var(--color-void) 40%, transparent) 100%
+    );
+  }
+
+  /*
+    Droplet beading. Each droplet gets a bright top-left catchlight and a dark
+    bottom-right shadow, which is what makes a circle read as a bead of water
+    rather than a dot.
+  */
+  .lg-bead {
+    background-image:
+      radial-gradient(
+        circle at 33% 30%,
+        rgb(255 255 255 / 0.5) 0%,
+        rgb(255 255 255 / 0.16) 32%,
+        transparent 55%
+      ),
+      radial-gradient(
+        circle at 68% 72%,
+        rgb(0 0 0 / 0.3) 0%,
+        transparent 52%
+      );
+    background-size:
+      13px 13px,
+      13px 13px;
+    background-position:
+      0 0,
+      0.5px 0.5px;
+    opacity: 0.16;
+    mix-blend-mode: overlay;
+    mask-image: radial-gradient(
+      140% 110% at 20% 0%,
+      black 0%,
+      transparent 62%
+    );
+  }
+
+  /* Larger, scattered droplets for surfaces big enough to show them. */
+  .lg-bead-lg {
+    background-size:
+      27px 27px,
+      27px 27px;
+    opacity: 0.2;
+  }
+
+  /*
+    Thickness. A bright hairline along the top, a darker one along the bottom,
+    plus a faint warm/cool split at the sides for chromatic dispersion.
+  */
+  .lg-rim {
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.42),
+      inset 0 -1px 0 0 rgb(0 0 0 / 0.4),
+      inset 1px 0 0 0 rgb(255 250 235 / 0.12),
+      inset -1px 0 0 0 rgb(190 215 255 / 0.12),
+      inset 0 0 22px -6px rgb(255 255 255 / 0.22);
+    border: 1px solid rgb(255 255 255 / 0.14);
+  }
+
+  .lg-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  /*
+    Scroll area with no visible bar. The list fades out at both ends instead,
+    which reads as depth rather than as a control bolted to the panel.
+  */
+  .quiet-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      black 18px,
+      black calc(100% - 20px),
+      transparent 100%
+    );
+  }
+
+  .quiet-scroll::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  /*
+    Legacy aliases. Kept so every surface picks up the new material without a
+    rewrite, and so anything still using them does not fall back to flat blur.
+  */
+  .glass,
+  .glass-soft {
+    background: color-mix(in oklab, var(--color-void) 34%, transparent);
+    backdrop-filter: blur(16px) saturate(160%) brightness(1.05);
+    border: 1px solid rgb(255 255 255 / 0.14);
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.38),
+      inset 0 -1px 0 0 rgb(0 0 0 / 0.36),
+      0 26px 70px -28px rgb(0 0 0 / 0.78);
+  }
+
+  /* Wide-tracked caps, echoing the title card burned into the film. */
+  .tracked {
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+  }
+
+  .tracked-tight {
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /*
+    Fine grain over the whole page. The source is low-light phone/FPV footage
+    with real sensor noise; a consistent grain layer makes the compression and
+    the video's own noise read as film stock rather than as artefacts.
+  */
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Warm bloom, like the LED cove lighting spilling onto a wall. */
+  .cove {
+    background: radial-gradient(
+      120% 80% at 50% 100%,
+      color-mix(in oklab, var(--color-champagne) 12%, transparent) 0%,
+      transparent 70%
+    );
+  }
+}
+
+/*
+  One material everywhere.
+
+  The phone build dropped rim displacement and beading purely to save
+  compositing cost, and that stripped-back version reads better: an even blur
+  with a lit rim looks like a clean pane, where the displaced edge band smeared
+  the bright interiors behind it and the droplet texture added noise over
+  already-noisy low-light footage. Desktop now uses the same treatment.
+
+  Compositing several blurred panes over a scrubbing video is the most expensive
+  thing on the page, so this is also the cheaper option on every device.
+
+  To bring back the fuller material, delete this block — the layers, the SVG
+  filters in GlassFilters and the beads prop are all still in place.
+*/
+.lg-edge,
+.lg-bead {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-specular {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

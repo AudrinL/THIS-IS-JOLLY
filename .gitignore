@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# next
+.next/
+out/
+build/
+next-env.d.ts
+*.tsbuildinfo
+
+# media — never commit video. The master is archival, the renditions live on R2.
+*.webm
+*.mp4
+*.mov
+source/
+processed/
+public/media/
+
+# env
+.env
+.env.local
+.env*.local
+
+# os / editor
+.DS_Store
+Thumbs.db
+*.log
