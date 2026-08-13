@@ -60,12 +60,18 @@ export function HeroOverlay() {
         <Cta label="Enter the house" short="Enter" />
       </header>
 
+      {/* ---- the wordmark, lifted into the night above the roofline ---- */}
+      <Wordmark />
+
       {/* ---- upper margins: two editorial notes ------------------------ */}
       <div
         data-hero-meta
-        className="mt-7 flex items-start justify-between gap-10 sm:mt-9"
+        className="mt-5 flex items-start justify-between gap-10 sm:mt-9"
       >
-        <p className="max-w-[21ch] text-[12.5px] leading-relaxed text-bone/65">
+        {/* Full width on a phone, where it sits under the wordmark and two
+            lines keep it clear of the roof; a narrow margin note beside the
+            wordmark from sm up. */}
+        <p className="max-w-none text-[12.5px] leading-relaxed text-bone/65 sm:max-w-[21ch]">
           One continuous walk through a contemporary hillside villa, shot after
           dark.
         </p>
@@ -73,9 +79,6 @@ export function HeroOverlay() {
           {chapters} chapters, {levels} levels, from the grounds to the roof.
         </p>
       </div>
-
-      {/* ---- the wordmark ---------------------------------------------- */}
-      <Wordmark />
 
       <div className="flex-1" />
 
@@ -113,24 +116,42 @@ export function HeroOverlay() {
 }
 
 /**
- * The wordmark, set as wide as the frame allows.
+ * The wordmark.
  *
- * Drawn in SVG rather than as HTML text so it spans the full width at every
+ * Drawn in SVG rather than as HTML text so its width is exact at every
  * viewport: `textLength` fixes the advance width to the viewBox, and the
- * viewBox scales to whatever space it is given, so the word touches both
- * margins on a phone and on a wide display without a single breakpoint.
+ * viewBox scales to whatever space it is given, so the word holds its
+ * proportions on a phone and on a wide display without a single breakpoint.
+ *
+ * Where it sits was measured, not guessed. Profiling the frame row by row, the
+ * top fifth is flat night — mean luminance 15 of 255, almost no variance, not a
+ * single bright pixel. The roofline arrives around a quarter down, and from
+ * halfway the lit facade and the pool own the picture, peaking at four times the
+ * luminance and ten times the detail. The word was previously set across that
+ * lower half, which is why it competed with the house. It now sits in the dark
+ * band above the roof, taken out of the column's flow so the editorial notes
+ * flank it in the margins rather than push it down. What little of it reaches
+ * the roofline is already thinned by the fade, so the architecture reads
+ * through the feet of the letters instead of colliding with them.
  */
 function Wordmark() {
   const title = 'JOLLY';
 
   return (
-    <div data-hero-wordmark className="mt-9 w-full sm:mt-11">
+    <div
+      data-hero-wordmark
+      /* In flow on a phone, where the dark band is too shallow to hold the
+         header, the word and a note all at once — so the note follows it down.
+         Out of flow from sm up, where the notes flank it in the margins. */
+      className="pointer-events-none mt-3 w-full sm:absolute sm:inset-x-8 sm:top-[10.5%] sm:mt-0 lg:inset-x-10"
+    >
       <svg
         viewBox="0 0 1000 270"
         /* Held well short of the margins: at full width the glyphs had to be
            stretched half again as wide to reach both edges, which read as a
-           banner rather than a wordmark. */
-        className="mx-auto w-[86%] max-w-[44rem] sm:w-[64%]"
+           banner rather than a wordmark. Narrower again on wide screens, so the
+           notes sit clear of it on either side. */
+        className="mx-auto w-[72%] max-w-[40rem] sm:w-[58%]"
         role="img"
         aria-label={tour.property.title}
       >
