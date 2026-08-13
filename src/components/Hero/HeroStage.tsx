@@ -1,7 +1,5 @@
 'use client';
 
-import { tour, CHAPTER_VIEWS, SPACES, TOUR_DURATION } from '@/lib/tour';
-import { clock } from '@/lib/format';
 import { HeroOverlay } from './HeroOverlay';
 
 /**
@@ -29,9 +27,6 @@ export function HeroStage({ children }: { children?: React.ReactNode }) {
         } as React.CSSProperties
       }
     >
-      {/* Metadata rail, now set over the top of the full-bleed image. */}
-      <MetaRail />
-
       {/* The frame. */}
       <div
         data-frame
@@ -77,35 +72,6 @@ export function HeroStage({ children }: { children?: React.ReactNode }) {
 
           <HeroOverlay />
         </div>
-      </div>
-    </div>
-  );
-}
-
-/** Small caps metadata, all of it read from tour-map.json. */
-function MetaRail() {
-  const items: [string, string][] = [
-    ['Walkthrough', clock(TOUR_DURATION)],
-    ['Chapters', String(CHAPTER_VIEWS.length)],
-    ['Spaces', String(SPACES.length)],
-    ['Captured', 'After dark'],
-  ];
-
-  return (
-    <div
-      data-hero-meta
-      className="absolute inset-x-0 top-0 z-30 flex items-center justify-between gap-6 px-6 py-5 sm:px-10 lg:px-12"
-    >
-      <span className="tracked text-[9px] text-bone/50">
-        {tour.property.title}
-      </span>
-      <div className="flex items-center gap-6 sm:gap-10">
-        {items.map(([label, value]) => (
-          <div key={label} className="hidden text-right sm:block">
-            <div className="tracked text-[8.5px] text-ash/70">{label}</div>
-            <div className="mt-1 text-[11px] text-linen/80">{value}</div>
-          </div>
-        ))}
       </div>
     </div>
   );
