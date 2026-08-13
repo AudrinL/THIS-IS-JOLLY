@@ -142,8 +142,11 @@ function Wordmark() {
       data-hero-wordmark
       /* In flow on a phone, where the dark band is too shallow to hold the
          header, the word and a note all at once — so the note follows it down.
-         Out of flow from sm up, where the notes flank it in the margins. */
-      className="pointer-events-none mt-3 w-full sm:absolute sm:inset-x-8 sm:top-[10.5%] sm:mt-0 lg:inset-x-10"
+         Out of flow from sm up, where the notes flank it in the margins.
+         `sm:w-auto` is load-bearing: the phone's `w-full` would otherwise
+         over-constrain left + right + width, CSS would drop `right`, and the
+         word would hang one inset to the right of centre. */
+      className="pointer-events-none mt-3 w-full sm:absolute sm:inset-x-8 sm:top-[10.5%] sm:mt-0 sm:w-auto lg:inset-x-10"
     >
       <svg
         viewBox="0 0 1000 270"
