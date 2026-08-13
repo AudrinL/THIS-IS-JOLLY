@@ -118,7 +118,12 @@ export class TourEngine {
      * way out. See the note beside `.lg-tint` in globals.css.
      */
     const text = stage.querySelectorAll('[data-hero-text]');
-    const panes = stage.querySelectorAll('[data-hero-ui] .lg');
+    /* Anything inside [data-hero-persist] is exempt from the exit: the header
+       is meant to stay with the visitor for the whole walk, not leave with the
+       rest of the hero. */
+    const panes = [...stage.querySelectorAll<HTMLElement>('[data-hero-ui] .lg')].filter(
+      (pane) => !pane.closest('[data-hero-persist]'),
+    );
     const meta = stage.querySelectorAll('[data-hero-meta]');
     const wordmark = stage.querySelector('[data-hero-wordmark]');
     const poster = stage.querySelector('[data-hero-poster]');

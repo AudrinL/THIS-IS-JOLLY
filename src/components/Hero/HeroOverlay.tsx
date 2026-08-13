@@ -32,8 +32,11 @@ export function HeroOverlay() {
       data-hero-ui
       className="pointer-events-none absolute inset-0 z-30 flex flex-col p-5 sm:p-8 lg:p-10"
     >
-      {/* ---- top: glass nav pill, call to action ---------------------- */}
-      <header className="flex items-start justify-between gap-4">
+      {/* ---- top: glass nav pill, call to action ----------------------
+          Marked to persist: everything else in the hero leaves as the frame
+          opens, but the header stays on screen for the whole walk. The stage is
+          sticky, so it holds its position without a second fixed element. */}
+      <header data-hero-persist className="flex items-start justify-between gap-4">
         <LiquidGlass
           variant="soft"
           radius={999}
