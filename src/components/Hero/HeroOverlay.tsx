@@ -124,22 +124,49 @@ function Wordmark() {
   const title = 'JOLLY';
 
   return (
-    <div data-hero-wordmark className="mt-8 w-full sm:mt-10">
+    <div data-hero-wordmark className="mt-9 w-full sm:mt-11">
       <svg
-        viewBox="0 0 1000 230"
-        className="w-full"
+        viewBox="0 0 1000 270"
+        /* Held well short of the margins: at full width the glyphs had to be
+           stretched half again as wide to reach both edges, which read as a
+           banner rather than a wordmark. */
+        className="mx-auto w-[86%] max-w-[44rem] sm:w-[64%]"
         role="img"
         aria-label={tour.property.title}
       >
+        <defs>
+          {/* The word settles into the architecture instead of sitting on top
+              of it: full strength across the caps, thinning through the lower
+              third, never quite reaching nothing. */}
+          <linearGradient
+            id="wordmark-fade"
+            gradientUnits="userSpaceOnUse"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="270"
+          >
+            <stop offset="0" stopColor="white" stopOpacity="1" />
+            <stop offset="0.5" stopColor="white" stopOpacity="0.92" />
+            <stop offset="1" stopColor="white" stopOpacity="0.16" />
+          </linearGradient>
+          <mask id="wordmark-mask">
+            <rect x="0" y="0" width="1000" height="270" fill="url(#wordmark-fade)" />
+          </mask>
+        </defs>
+
         <text
           x="500"
-          y="196"
+          y="245"
           textAnchor="middle"
-          textLength="985"
+          /* Sized so the set width is already close to the natural advance —
+             the fit is guaranteed, but the glyphs are barely touched. */
+          textLength="920"
           lengthAdjust="spacingAndGlyphs"
-          fontSize="230"
-          fontWeight="300"
-          fill="rgb(242 233 216 / 0.34)"
+          fontSize="300"
+          fontWeight="600"
+          fill="rgb(242 233 216 / 0.38)"
+          mask="url(#wordmark-mask)"
           style={{ fontFamily: 'var(--font-display)' }}
         >
           {title}
