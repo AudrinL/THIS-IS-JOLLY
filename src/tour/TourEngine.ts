@@ -175,9 +175,12 @@ export class TourEngine {
     if (p < openEnd) {
       const t = (p - holdEnd) / (openEnd - holdEnd);
       this.opening.progress(t);
-      // Creep into the first seconds of film while the frame is still opening,
-      // so the first frame the visitor sees full-bleed is already in motion.
-      this.publish('opening', 0, t * 0.012);
+      // The film is held at its first frame for the whole opening. It used to
+      // creep a fraction of the timeline while the frame grew, which put the
+      // walk roughly two and a half seconds into the Ground Floor by the time
+      // it went full bleed; the walk now begins on chapter two's first frame
+      // exactly, and the first movement is the visitor's own.
+      this.publish('opening', 0, 0);
       return;
     }
 
