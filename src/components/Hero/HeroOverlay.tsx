@@ -138,9 +138,12 @@ function Wordmark() {
   const title = 'JOLLY';
 
   return (
-    <div
+    <h1
       data-hero-wordmark
-      /* In flow on a phone, where the dark band is too shallow to hold the
+      /* The document's one h1. The word is drawn in SVG, so the heading takes
+         its accessible name from the graphic's aria-label — the page must still
+         announce and index as the property, not as a nameless image.
+         In flow on a phone, where the dark band is too shallow to hold the
          header, the word and a note all at once — so the note follows it down.
          Out of flow from sm up, where the notes flank it in the margins.
          `sm:w-auto` is load-bearing: the phone's `w-full` would otherwise
@@ -196,7 +199,7 @@ function Wordmark() {
           {title}
         </text>
       </svg>
-    </div>
+    </h1>
   );
 }
 

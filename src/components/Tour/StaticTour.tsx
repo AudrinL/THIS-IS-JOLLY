@@ -17,11 +17,12 @@ export function StaticTour() {
   return (
     <div className="relative">
       <section className="grain relative h-svh w-full overflow-hidden bg-void">
+        {/* Wrapped, as in HeroStage: the poster is a plain file rather than a
+            responsive set, and <picture> keeps it out of next/image's remit. */}
         <picture>
-          <source srcSet="/media/posters/hero.avif" type="image/avif" />
           <img
-            src="/media/posters/hero.jpg"
-            alt="A contemporary white hillside villa at dusk, lit from within"
+            src="/media/posters/hero.png"
+            alt="A contemporary white hillside villa at night, lit from within, seen from the air"
             className="absolute inset-0 size-full object-cover opacity-80"
           />
         </picture>
