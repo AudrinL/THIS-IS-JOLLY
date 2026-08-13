@@ -109,7 +109,16 @@ export class TourEngine {
    */
   private buildOpeningTimeline() {
     const stage = this.opts.stage;
-    const ui = stage.querySelectorAll('[data-hero-ui]');
+    /*
+     * The hero interface is faded in two halves rather than by dimming the one
+     * container that holds it. Putting `opacity` on that container would make it
+     * a backdrop root, and the glass inside would drop its blur — reading as
+     * flat plastic — the moment the fade began. So the type fades on opacity and
+     * the panes fade on their own --lg-alpha, which leaves them glass the whole
+     * way out. See the note beside `.lg-tint` in globals.css.
+     */
+    const text = stage.querySelectorAll('[data-hero-text]');
+    const panes = stage.querySelectorAll('[data-hero-ui] .lg');
     const meta = stage.querySelectorAll('[data-hero-meta]');
     const wordmark = stage.querySelector('[data-hero-wordmark]');
     const poster = stage.querySelector('[data-hero-poster]');
@@ -120,7 +129,12 @@ export class TourEngine {
         { scale: 1.14, opacity: 0, filter: 'blur(6px)', ease: 'power2.in', duration: 0.5 },
         0,
       )
-      .to(ui, { opacity: 0, ease: 'power1.in', duration: 0.45 }, 0.05)
+      .to(text, { opacity: 0, ease: 'power1.in', duration: 0.45 }, 0.05)
+      .to(
+        panes,
+        { '--lg-alpha': 0, '--lg-blur': '0px', ease: 'power1.in', duration: 0.45 },
+        0.05,
+      )
       .to(meta, { opacity: 0, y: -12, ease: 'power1.in', duration: 0.4 }, 0)
       .to(
         stage,

@@ -57,9 +57,10 @@ export function StopOverlay({
       {/* Room title. Offset so it clears the room rail on the left. */}
       <div
         className="absolute inset-x-0 bottom-[15%] flex justify-center pr-5 pl-[86px] lg:pr-10 lg:pl-[330px]"
-        style={{ opacity: presence, transform: `translateY(${(1 - presence) * 14}px)` }}
+        style={{ transform: `translateY(${(1 - presence) * 14}px)` }}
       >
         <LiquidGlass
+          appear={presence}
           radius={22}
           beads="large"
           className="max-w-[30rem]"
@@ -131,10 +132,10 @@ export function StopOverlay({
                     : nearBottom
                       ? { bottom: 14 }
                       : { top: '50%', transform: 'translateY(-50%)' }),
-                  opacity: presence * Math.min(1, slot / 0.18),
                 } as React.CSSProperties}
               >
                 <LiquidGlass
+                  appear={presence * Math.min(1, slot / 0.18)}
                   radius={16}
                   variant="soft"
                   beads="none"

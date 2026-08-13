@@ -27,18 +27,24 @@ export function SpacePanel({
         'bottom-24 sm:bottom-28',
         // Clears the collapsed rail at rest, and steps aside when it opens.
         railOpen ? 'left-[334px]' : 'left-[94px] sm:left-[108px]',
-        visible ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-4 opacity-0 blur-[2px]',
-        // On a phone an open rail leaves no room beside it, so the card yields.
-        railOpen ? 'max-sm:opacity-0' : '',
+        visible ? 'translate-y-0' : 'translate-y-4',
       ].join(' ')}
     >
       {space && (
         <LiquidGlass
           as="article"
           key={space.id}
+          /* The pane fades itself — an ancestor opacity would strip its blur. */
+          appear={visible ? 1 : 0}
+          appearMs={650}
           radius={24}
           beads="large"
-          className="w-[min(21rem,calc(100vw-7rem))]"
+          className={[
+            'w-[min(21rem,calc(100vw-7rem))]',
+            // On a phone an open rail leaves no room beside it, so the card
+            // yields. Marked important: it has to beat the inline `appear`.
+            railOpen ? 'max-sm:[--lg-alpha:0]! max-sm:[--lg-blur:0px]!' : '',
+          ].join(' ')}
           contentClassName="p-5"
           style={
             {

@@ -81,7 +81,7 @@ export function HeroOverlay() {
 
       {/* ---- bottom: tagline, call to action, figures ------------------ */}
       <footer className="flex items-end justify-between gap-6">
-        <div>
+        <div data-hero-text>
           <p
             className="max-w-[15ch] text-balance text-[clamp(1rem,2vw,1.5rem)] leading-[1.15] text-linen"
             style={{ fontFamily: 'var(--font-editorial)' }}
