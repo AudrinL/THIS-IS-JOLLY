@@ -59,18 +59,12 @@ export function Footer() {
       {/*
         The name again, last thing on the page.
 
-        Set wider and dimmer than in the hero: there is no architecture behind
-        it here, so the fill is pulled back and the mask carries the word into
-        the black at the foot of the page rather than ending on an edge. Full
-        bleed, and the feet of the letters are allowed to run past the bottom of
-        the document — it reads as the page signing off, not as another block.
+        Unlike the hero there is no architecture behind it, so the word is set
+        plainly: no fade, nothing cropped, the whole of it sitting on the black
+        with the page's own padding beneath its feet.
       */}
-      <div aria-hidden className="overflow-hidden px-5 sm:px-8 lg:px-10">
-        <Wordmark
-          id="footer"
-          fill="rgb(242 233 216 / 0.16)"
-          className="-mb-[7%] block w-full"
-        />
+      <div aria-hidden className="px-5 pb-10 sm:px-8 lg:px-10">
+        <Wordmark id="footer" fade={false} fill="rgb(242 233 216 / 0.5)" className="block w-full" />
       </div>
     </footer>
   );
