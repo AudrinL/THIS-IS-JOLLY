@@ -1,4 +1,4 @@
-import { SPACES, Space, TOUR_START, TOUR_END } from '@/lib/tour';
+import { SPACES, Space, RANGES, TOUR_END } from '@/lib/tour';
 import { STOPS, StopDefinition } from '@/data/stops';
 
 /**
@@ -56,49 +56,57 @@ export interface TimelineOptions {
  *
  * Stops are authored against space slugs, so if a space is excluded or the
  * metadata changes, an unmatched stop is dropped rather than throwing.
+ *
+ * Motion is laid out one included range at a time. An excluded chapter in the
+ * middle of the film leaves a gap in the master timeline, and no scroll distance
+ * is spent crossing it — the walk steps straight from one range to the next.
  */
 export function buildTimeline(opts: TimelineOptions): Resolved {
   const bySlug = new Map(SPACES.map((s) => [s.slug, s]));
 
-  const stops: ResolvedStop[] = STOPS.flatMap((def) => {
+  const candidates: ResolvedStop[] = STOPS.flatMap((def) => {
     const space = bySlug.get(def.slug);
     if (!space) return [];
     // Hold a little past the room's midpoint — by then the camera has usually
     // settled and the frame is representative.
     const time = Math.min(space.end - 0.35, space.start + space.duration * (def.at ?? 0.55));
     return [{ ...def, space, time }];
-  })
-    .filter((s) => s.time > TOUR_START && s.time < TOUR_END)
-    .sort((a, b) => a.time - b.time);
+  }).sort((a, b) => a.time - b.time);
 
   const segments: Segment[] = [];
-  let cursor = TOUR_START;
+  const stops: ResolvedStop[] = [];
 
-  for (const stop of stops) {
-    if (stop.time > cursor) {
+  for (const range of RANGES) {
+    let cursor = range.start;
+
+    for (const stop of candidates) {
+      if (stop.time <= range.start || stop.time >= range.end) continue;
+      stops.push(stop);
+      if (stop.time > cursor) {
+        segments.push({
+          kind: 'motion',
+          fromTime: cursor,
+          toTime: stop.time,
+          px: (stop.time - cursor) * opts.pxPerSecond,
+        });
+      }
+      segments.push({
+        kind: 'dwell',
+        atTime: stop.time,
+        px: stop.hold * opts.dwellPxPerSecond,
+        stop,
+      });
+      cursor = stop.time;
+    }
+
+    if (cursor < range.end) {
       segments.push({
         kind: 'motion',
         fromTime: cursor,
-        toTime: stop.time,
-        px: (stop.time - cursor) * opts.pxPerSecond,
+        toTime: range.end,
+        px: (range.end - cursor) * opts.pxPerSecond,
       });
     }
-    segments.push({
-      kind: 'dwell',
-      atTime: stop.time,
-      px: stop.hold * opts.dwellPxPerSecond,
-      stop,
-    });
-    cursor = stop.time;
-  }
-
-  if (cursor < TOUR_END) {
-    segments.push({
-      kind: 'motion',
-      fromTime: cursor,
-      toTime: TOUR_END,
-      px: (TOUR_END - cursor) * opts.pxPerSecond,
-    });
   }
 
   const totalPx = segments.reduce((sum, s) => sum + s.px, 0);

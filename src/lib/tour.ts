@@ -93,11 +93,14 @@ export const tour = raw as unknown as TourMap;
 /**
  * Chapters deliberately left out of the walkthrough.
  *
- * The tour opens on the Ground Floor rather than the exterior approach. The
- * data is left untouched — this is a presentation decision, so it lives here
- * and can be reversed by emptying the set.
+ * The tour opens on the Ground Floor rather than the exterior approach, and the
+ * Guest Wing is not shown. The data is left untouched — this is a presentation
+ * decision, so it lives here and can be reversed by emptying the set.
+ *
+ * Exclusions may sit anywhere in the film, not just at its head, so everything
+ * below is written against the included *ranges* rather than a single span.
  */
-export const EXCLUDED_CHAPTER_IDS = new Set<string>(['c1']);
+export const EXCLUDED_CHAPTER_IDS = new Set<string>(['c1', 'c4']);
 
 /** Everything in the file, including excluded chapters. */
 export const ALL_CHAPTERS = tour.chapters;
@@ -113,10 +116,30 @@ export const CAPTIONS = tour.captions.filter((c) => {
 });
 export const CUTS = tour.cuts;
 
+export interface TimeRange {
+  start: number;
+  end: number;
+}
+
+/**
+ * The stretches of the master timeline the walk actually covers.
+ *
+ * Adjacent included chapters are merged, so with nothing excluded this is a
+ * single range and every derived value below collapses to the linear case.
+ */
+export const RANGES: TimeRange[] = CHAPTERS.reduce<TimeRange[]>((acc, c) => {
+  const last = acc[acc.length - 1];
+  if (last && Math.abs(last.end - c.start) < 1e-6) last.end = c.end;
+  else acc.push({ start: c.start, end: c.end });
+  return acc;
+}, []);
+
 /** Where the walk begins and ends, in the master's own timeline. */
-export const TOUR_START = CHAPTERS[0].start;
-export const TOUR_END = CHAPTERS[CHAPTERS.length - 1].end;
-export const TOUR_DURATION = TOUR_END - TOUR_START;
+export const TOUR_START = RANGES[0].start;
+export const TOUR_END = RANGES[RANGES.length - 1].end;
+
+/** Length of the walk with the excluded stretches taken out. */
+export const TOUR_DURATION = RANGES.reduce((sum, r) => sum + (r.end - r.start), 0);
 
 /** The walkthrough's length — what the interface should quote. */
 export const DURATION = TOUR_DURATION;
@@ -144,12 +167,20 @@ export function spaceById(id: string): Space | undefined {
   return SPACES.find((s) => s.id === id);
 }
 
-/** Chapter containing a given tour time, clamped to the walk's own range. */
+/**
+ * Chapter containing a given tour time.
+ *
+ * A time inside an excluded stretch resolves to the last chapter before it, not
+ * to the end of the walk — landing on the finale would put the video controller
+ * on the wrong file with a nonsensical local time.
+ */
 export function chapterAt(time: number): Chapter {
+  let candidate = CHAPTERS[0];
   for (const c of CHAPTERS) {
     if (time >= c.start && time < c.end) return c;
+    if (time >= c.end) candidate = c;
   }
-  return time < TOUR_START ? CHAPTERS[0] : CHAPTERS[CHAPTERS.length - 1];
+  return candidate;
 }
 
 /** Global tour time -> time within that chapter's own video file. */
@@ -159,12 +190,28 @@ export function localTime(time: number, chapter: Chapter): number {
 
 /** Scroll progress (0..1) -> time in the master's timeline. */
 export function timeAtProgress(progress: number): number {
-  return TOUR_START + Math.max(0, Math.min(1, progress)) * TOUR_DURATION;
+  let remaining = Math.max(0, Math.min(1, progress)) * TOUR_DURATION;
+  for (const r of RANGES) {
+    const span = r.end - r.start;
+    if (remaining <= span) return r.start + remaining;
+    remaining -= span;
+  }
+  return TOUR_END;
 }
 
-/** Time in the master's timeline -> seconds elapsed in the walk. */
+/**
+ * Time in the master's timeline -> seconds elapsed in the walk.
+ *
+ * Excluded stretches cost nothing, so the clock the visitor reads counts only
+ * what they are actually shown.
+ */
 export function elapsed(time: number): number {
-  return Math.max(0, Math.min(TOUR_DURATION, time - TOUR_START));
+  let total = 0;
+  for (const r of RANGES) {
+    if (time <= r.start) break;
+    total += Math.min(time, r.end) - r.start;
+  }
+  return Math.max(0, Math.min(TOUR_DURATION, total));
 }
 
 /**
