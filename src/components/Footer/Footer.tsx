@@ -1,5 +1,5 @@
-import { CHAPTER_VIEWS, SPACES, tour, TOUR_DURATION, elapsed } from '@/lib/tour';
-import { clock, pad2 } from '@/lib/format';
+import { CHAPTER_VIEWS, SPACES, tour } from '@/lib/tour';
+import { pad2 } from '@/lib/format';
 
 /**
  * What the visitor arrives at once the walk is over: the house written down.
@@ -14,12 +14,12 @@ export function Footer() {
           className="max-w-[26ch] text-[clamp(1.6rem,4vw,3rem)] leading-[1.1] text-linen"
           style={{ fontFamily: 'var(--font-editorial)' }}
         >
-          {tour.property.title}, walked end to end in {clock(TOUR_DURATION)}.
+          {tour.property.title}, walked end to end in one continuous take.
         </p>
 
         <ol className="mt-16 divide-y divide-linen/10 border-y border-linen/10">
           {CHAPTER_VIEWS.map((chapter, i) => (
-            <li key={chapter.id} className="grid grid-cols-[3rem_1fr_auto] items-baseline gap-4 py-5">
+            <li key={chapter.id} className="grid grid-cols-[3rem_1fr] items-baseline gap-4 py-5">
               <span className="tracked text-[9px] text-ash/60">{pad2(i + 1)}</span>
               <div>
                 <div className="text-[15px] text-linen/90">{chapter.name}</div>
@@ -30,9 +30,6 @@ export function Footer() {
                     .join(' · ')}
                 </div>
               </div>
-              <span className="text-[11px] text-ash/60 tabular-nums">
-                {clock(elapsed(chapter.start))}
-              </span>
             </li>
           ))}
         </ol>

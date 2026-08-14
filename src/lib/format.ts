@@ -1,9 +1,8 @@
-/** 338.54 -> "5:38" */
-export function clock(seconds: number): string {
-  const m = Math.floor(seconds / 60);
-  const s = Math.round(seconds % 60);
-  return `${m}:${String(s).padStart(2, '0')}`;
-}
+/*
+ * There is deliberately no clock formatter here. The walk is never quoted back
+ * to the visitor as a running time — position is carried by the chapter rail
+ * and the progress line instead.
+ */
 
 /** 33 -> "33", 7 -> "07" */
 export function pad2(n: number): string {

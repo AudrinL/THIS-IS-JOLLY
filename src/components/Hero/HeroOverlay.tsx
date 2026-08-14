@@ -1,7 +1,6 @@
 'use client';
 
-import { tour, CHAPTER_VIEWS, SPACES, TOUR_DURATION } from '@/lib/tour';
-import { clock } from '@/lib/format';
+import { tour, CHAPTER_VIEWS, SPACES } from '@/lib/tour';
 import { LiquidGlass } from '@/components/GlassPanel/LiquidGlass';
 
 /**
@@ -111,7 +110,7 @@ export function HeroOverlay() {
         {/* two figures, stacked — the architecture stays the subject */}
         <div className="hidden flex-col gap-3 sm:flex">
           <Stat value={String(spaces)} label="spaces mapped, frame by frame" />
-          <Stat value={clock(TOUR_DURATION)} label="of unbroken walkthrough" />
+          <Stat value={String(chapters)} label="chapters, walked end to end" />
         </div>
       </footer>
     </div>
