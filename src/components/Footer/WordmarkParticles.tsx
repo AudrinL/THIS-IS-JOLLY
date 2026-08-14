@@ -222,24 +222,20 @@ export function WordmarkParticles() {
 
       // Nothing is moving and the pointer has left: stop burning frames until
       // something asks for them again.
-      if (!moving && !pointer) {
-        running = false;
-        return;
-      }
+      if (!moving && !pointer) return;
       raf = requestAnimationFrame(frame);
     }
 
     /**
      * Ask for frames again.
      *
-     * The pending frame is cancelled rather than trusted: a request made while
-     * the tab was not compositing can sit unfired indefinitely, and a `running`
-     * flag on its own would then latch the loop off for good.
+     * The pending frame is cancelled rather than tracked with a flag: a request
+     * made while the tab was not compositing can sit unfired indefinitely, and
+     * a flag would then latch the loop off for good.
      */
     function wake() {
       if (disposed) return;
       cancelAnimationFrame(raf);
-      running = true;
       raf = requestAnimationFrame(frame);
     }
 
