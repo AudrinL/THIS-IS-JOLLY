@@ -1,5 +1,6 @@
 import { CHAPTER_VIEWS, SPACES, tour } from '@/lib/tour';
 import { pad2 } from '@/lib/format';
+import { Wordmark } from '@/components/Wordmark';
 
 /**
  * What the visitor arrives at once the walk is over: the house written down.
@@ -53,6 +54,23 @@ export function Footer() {
             Back to the top
           </a>
         </div>
+      </div>
+
+      {/*
+        The name again, last thing on the page.
+
+        Set wider and dimmer than in the hero: there is no architecture behind
+        it here, so the fill is pulled back and the mask carries the word into
+        the black at the foot of the page rather than ending on an edge. Full
+        bleed, and the feet of the letters are allowed to run past the bottom of
+        the document — it reads as the page signing off, not as another block.
+      */}
+      <div aria-hidden className="overflow-hidden px-5 sm:px-8 lg:px-10">
+        <Wordmark
+          id="footer"
+          fill="rgb(242 233 216 / 0.16)"
+          className="-mb-[7%] block w-full"
+        />
       </div>
     </footer>
   );

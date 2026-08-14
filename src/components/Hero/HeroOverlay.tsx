@@ -3,6 +3,7 @@
 import { tour, CHAPTER_VIEWS, SPACES, TOUR_DURATION } from '@/lib/tour';
 import { clock } from '@/lib/format';
 import { LiquidGlass } from '@/components/GlassPanel/LiquidGlass';
+import { Wordmark as WordmarkSvg } from '@/components/Wordmark';
 
 /**
  * Everything drawn on top of the hero frame.
@@ -119,12 +120,8 @@ export function HeroOverlay() {
 }
 
 /**
- * The wordmark.
- *
- * Drawn in SVG rather than as HTML text so its width is exact at every
- * viewport: `textLength` fixes the advance width to the viewBox, and the
- * viewBox scales to whatever space it is given, so the word holds its
- * proportions on a phone and on a wide display without a single breakpoint.
+ * The wordmark in the hero frame. The drawing itself lives in
+ * `components/Wordmark`; what is decided here is only where it sits.
  *
  * Where it sits was measured, not guessed. Profiling the frame row by row, the
  * top fifth is flat night — mean luminance 15 of 255, almost no variance, not a
@@ -138,8 +135,6 @@ export function HeroOverlay() {
  * through the feet of the letters instead of colliding with them.
  */
 function Wordmark() {
-  const title = 'JOLLY';
-
   return (
     <h1
       data-hero-wordmark
@@ -154,54 +149,11 @@ function Wordmark() {
          word would hang one inset to the right of centre. */
       className="pointer-events-none mt-3 w-full sm:absolute sm:inset-x-8 sm:top-[10.5%] sm:mt-0 sm:w-auto lg:inset-x-10"
     >
-      <svg
-        viewBox="0 0 1000 270"
-        /* Held well short of the margins: at full width the glyphs had to be
-           stretched half again as wide to reach both edges, which read as a
-           banner rather than a wordmark. Narrower again on wide screens, so the
-           notes sit clear of it on either side. */
-        className="mx-auto w-[72%] max-w-[40rem] sm:w-[58%]"
-        role="img"
-        aria-label={tour.property.title}
-      >
-        <defs>
-          {/* The word settles into the architecture instead of sitting on top
-              of it: full strength across the caps, thinning through the lower
-              third, never quite reaching nothing. */}
-          <linearGradient
-            id="wordmark-fade"
-            gradientUnits="userSpaceOnUse"
-            x1="0"
-            y1="0"
-            x2="0"
-            y2="270"
-          >
-            <stop offset="0" stopColor="white" stopOpacity="1" />
-            <stop offset="0.5" stopColor="white" stopOpacity="0.92" />
-            <stop offset="1" stopColor="white" stopOpacity="0.16" />
-          </linearGradient>
-          <mask id="wordmark-mask">
-            <rect x="0" y="0" width="1000" height="270" fill="url(#wordmark-fade)" />
-          </mask>
-        </defs>
-
-        <text
-          x="500"
-          y="245"
-          textAnchor="middle"
-          /* Sized so the set width is already close to the natural advance —
-             the fit is guaranteed, but the glyphs are barely touched. */
-          textLength="920"
-          lengthAdjust="spacingAndGlyphs"
-          fontSize="300"
-          fontWeight="600"
-          fill="rgb(242 233 216 / 0.38)"
-          mask="url(#wordmark-mask)"
-          style={{ fontFamily: 'var(--font-display)' }}
-        >
-          {title}
-        </text>
-      </svg>
+      {/* Held well short of the margins: at full width the glyphs had to be
+          stretched half again as wide to reach both edges, which read as a
+          banner rather than a wordmark. Narrower again on wide screens, so the
+          notes sit clear of it on either side. */}
+      <WordmarkSvg id="hero" className="mx-auto w-[72%] max-w-[40rem] sm:w-[58%]" />
     </h1>
   );
 }
