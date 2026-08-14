@@ -1,7 +1,8 @@
 'use client';
 
-import { CHAPTER_VIEWS, tour } from '@/lib/tour';
+import { CHAPTER_VIEWS, tour, TOUR_DURATION, elapsed } from '@/lib/tour';
 import { spacePosterUrl } from '@/lib/media';
+import { clock } from '@/lib/format';
 import { HeroOverlay } from '@/components/Hero/HeroOverlay';
 
 /**
@@ -34,8 +35,8 @@ export function StaticTour() {
           className="max-w-[34ch] text-[clamp(1.4rem,3.4vw,2.4rem)] leading-[1.2] text-linen"
           style={{ fontFamily: 'var(--font-editorial)' }}
         >
-          {tour.property.title} in {CHAPTER_VIEWS.length} chapters, the walkthrough presented
-          as stills.
+          {tour.property.title} in {CHAPTER_VIEWS.length} chapters, {clock(TOUR_DURATION)} of
+          walkthrough presented as stills.
         </p>
 
         {CHAPTER_VIEWS.map((chapter, i) => (
@@ -45,6 +46,9 @@ export function StaticTour() {
                 {String(i + 1).padStart(2, '0')}
               </span>
               <h2 className="text-[1.5rem] text-linen">{chapter.name}</h2>
+              <span className="ml-auto text-[11px] text-ash/60 tabular-nums">
+                {clock(elapsed(chapter.start))}–{clock(elapsed(chapter.end))}
+              </span>
             </header>
 
             <div className="mt-8 grid gap-8 sm:grid-cols-2">

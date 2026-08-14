@@ -1,7 +1,7 @@
 'use client';
 
-import { CHAPTER_VIEWS } from '@/lib/tour';
-import { pad2 } from '@/lib/format';
+import { CHAPTER_VIEWS, TOUR_DURATION, elapsed } from '@/lib/tour';
+import { clock, pad2 } from '@/lib/format';
 import type { TourState } from '@/tour/InteractionManager';
 
 /**
@@ -37,10 +37,12 @@ export function TourHud({
         <div className="mt-1.5 text-[15px] text-linen/90">{chapter?.name ?? ''}</div>
       </div>
 
-      {/* space, lower right — position is carried by the rail and the progress
-          line, so the walk is never quoted back as a running time */}
+      {/* space + time, lower right */}
       <div className="pointer-events-none absolute right-5 bottom-6 text-right sm:right-10 sm:bottom-8">
         <div className="text-[13px] text-linen/70">{state.space?.name ?? ''}</div>
+        <div className="tracked mt-1.5 text-[8.5px] text-ash/60 tabular-nums">
+          {clock(elapsed(state.time))} / {clock(TOUR_DURATION)}
+        </div>
       </div>
 
       {/* chapter rail, right edge — vertical on desktop only */}
