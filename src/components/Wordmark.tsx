@@ -21,31 +21,26 @@ export function Wordmark({
   id,
   className,
   fill = 'rgb(242 233 216 / 0.38)',
-  fade = true,
 }: {
   id: string;
   className?: string;
   fill?: string;
-  /** Thin the word towards its feet. Off where the whole word must read evenly. */
-  fade?: boolean;
 }) {
   const fadeId = `${id}-wordmark-fade`;
   const maskId = `${id}-wordmark-mask`;
 
   return (
     <svg viewBox="0 0 1000 270" className={className} role="img" aria-label={tour.property.title}>
-      {fade && (
-        <defs>
-          <linearGradient id={fadeId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="270">
-            <stop offset="0" stopColor="white" stopOpacity="1" />
-            <stop offset="0.5" stopColor="white" stopOpacity="0.92" />
-            <stop offset="1" stopColor="white" stopOpacity="0.16" />
-          </linearGradient>
-          <mask id={maskId}>
-            <rect x="0" y="0" width="1000" height="270" fill={`url(#${fadeId})`} />
-          </mask>
-        </defs>
-      )}
+      <defs>
+        <linearGradient id={fadeId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="270">
+          <stop offset="0" stopColor="white" stopOpacity="1" />
+          <stop offset="0.5" stopColor="white" stopOpacity="0.92" />
+          <stop offset="1" stopColor="white" stopOpacity="0.16" />
+        </linearGradient>
+        <mask id={maskId}>
+          <rect x="0" y="0" width="1000" height="270" fill={`url(#${fadeId})`} />
+        </mask>
+      </defs>
 
       <text
         x="500"
@@ -58,7 +53,7 @@ export function Wordmark({
         fontSize="300"
         fontWeight="600"
         fill={fill}
-        mask={fade ? `url(#${maskId})` : undefined}
+        mask={`url(#${maskId})`}
         style={{ fontFamily: 'var(--font-display)' }}
       >
         JOLLY

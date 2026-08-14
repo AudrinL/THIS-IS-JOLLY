@@ -1,6 +1,6 @@
 import { CHAPTER_VIEWS, SPACES, tour } from '@/lib/tour';
 import { pad2 } from '@/lib/format';
-import { Wordmark } from '@/components/Wordmark';
+import { WordmarkParticles } from '@/components/Footer/WordmarkParticles';
 
 /**
  * What the visitor arrives at once the walk is over: the house written down.
@@ -57,14 +57,11 @@ export function Footer() {
       </div>
 
       {/*
-        The name again, last thing on the page.
-
-        Unlike the hero there is no architecture behind it, so the word is set
-        plainly: no fade, nothing cropped, the whole of it sitting on the black
-        with the page's own padding beneath its feet.
+        The name again, last thing on the page: the whole word, nothing cropped,
+        thinning towards its feet, and made of dust that comes to the pointer.
       */}
-      <div aria-hidden className="px-5 pb-10 sm:px-8 lg:px-10">
-        <Wordmark id="footer" fade={false} fill="rgb(242 233 216 / 0.5)" className="block w-full" />
+      <div className="px-5 pb-10 sm:px-8 lg:px-10">
+        <WordmarkParticles />
       </div>
     </footer>
   );
