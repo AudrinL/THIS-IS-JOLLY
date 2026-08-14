@@ -93,14 +93,15 @@ export const tour = raw as unknown as TourMap;
 /**
  * Chapters deliberately left out of the walkthrough.
  *
- * The tour opens on the Ground Floor rather than the exterior approach, and the
- * Guest Wing is not shown. The data is left untouched — this is a presentation
- * decision, so it lives here and can be reversed by emptying the set.
+ * The tour opens on the Ground Floor rather than the exterior approach, the
+ * Guest Wing is not shown, and the walk ends on Wellness & Grounds rather than
+ * the Finale. The data is left untouched — this is a presentation decision, so
+ * it lives here and can be reversed by emptying the set.
  *
  * Exclusions may sit anywhere in the film, not just at its head, so everything
  * below is written against the included *ranges* rather than a single span.
  */
-export const EXCLUDED_CHAPTER_IDS = new Set<string>(['c1', 'c4']);
+export const EXCLUDED_CHAPTER_IDS = new Set<string>(['c1', 'c4', 'c7']);
 
 /** Everything in the file, including excluded chapters. */
 export const ALL_CHAPTERS = tour.chapters;
