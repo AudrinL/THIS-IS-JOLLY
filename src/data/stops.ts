@@ -10,6 +10,14 @@
  * `at` is the fraction through the space where the camera holds; changing it
  * moves the held frame and would invalidate the coordinates below.
  * `hold` is in seconds of dwell, converted to scroll distance by the timeline.
+ *
+ * How many of these there should be is a question the film answers, not a
+ * budget to spend. Every stop is the walk stopping, so a stop has to be worth
+ * standing still for; every hotspot after the third is the room repeating
+ * itself. A pass that annotated sixteen rooms with four points each read as
+ * being handed a leaflet in every doorway — the house stopped being the subject.
+ * Eleven rooms, three points each: the walk keeps moving, and the frames that do
+ * hold are the ones with something in them worth pointing at.
  */
 
 export interface Hotspot {
@@ -37,9 +45,39 @@ export interface StopDefinition {
 
 export const STOPS: StopDefinition[] = [
   {
+    slug: 'dining-great-room',
+    at: 0.55,
+    hold: 3.4,
+    title: 'Dining & Great Room',
+    blurb: 'The double-height volume the rest of the ground floor is arranged around.',
+    hotspots: [
+      {
+        id: 'chandelier',
+        label: 'Halo chandeliers',
+        text: 'Sculptural rings suspended in the void, stacked one above the other.',
+        x: 24,
+        y: 13,
+      },
+      {
+        id: 'table',
+        label: 'Dining table',
+        text: 'Long table under the rings, set with high-backed black and white chairs.',
+        x: 13,
+        y: 70,
+      },
+      {
+        id: 'shelving',
+        label: 'Display shelving',
+        text: 'Built-in white niches holding curated objets, lit from within.',
+        x: 26,
+        y: 50,
+      },
+    ],
+  },
+  {
     slug: 'living-room',
     at: 0.55,
-    hold: 3.6,
+    hold: 3.4,
     title: 'Living Room',
     blurb: 'A double-height volume held between the shelving wall and the glazing.',
     hotspots: [
@@ -69,7 +107,7 @@ export const STOPS: StopDefinition[] = [
   {
     slug: 'dry-kitchen',
     at: 0.55,
-    hold: 3.6,
+    hold: 3.4,
     title: 'Dry Kitchen',
     blurb: 'Handleless cabinetry under a crystal drop, with the island as the room’s centre.',
     hotspots: [
@@ -99,7 +137,7 @@ export const STOPS: StopDefinition[] = [
   {
     slug: 'feature-staircase',
     at: 0.55,
-    hold: 3.8,
+    hold: 3.4,
     title: 'Feature Staircase',
     blurb: 'The vertical spine of the house, lit tread by tread.',
     hotspots: [
@@ -159,7 +197,7 @@ export const STOPS: StopDefinition[] = [
   {
     slug: 'walk-in-closet',
     at: 0.55,
-    hold: 4.2,
+    hold: 3.8,
     title: 'Walk-In Closet',
     blurb: 'A boutique in its own right — the longest single space in the house.',
     hotspots: [
@@ -187,9 +225,39 @@ export const STOPS: StopDefinition[] = [
     ],
   },
   {
+    slug: 'games-room',
+    at: 0.55,
+    hold: 3.4,
+    title: 'Games Room',
+    blurb: 'The last room before the terrace, with the pool glowing through the glass.',
+    hotspots: [
+      {
+        id: 'table',
+        label: 'Pool table',
+        text: 'Full-size table racked and ready, centred under a single flush light.',
+        x: 44,
+        y: 78,
+      },
+      {
+        id: 'joinery',
+        label: 'Display joinery',
+        text: 'Glass-fronted wall units in white and brass, with the drinks cabinet set in black.',
+        x: 78,
+        y: 40,
+      },
+      {
+        id: 'doors',
+        label: 'Terrace doors',
+        text: 'Sliding glass onto the deck, the lap pool lit blue directly beyond.',
+        x: 17,
+        y: 52,
+      },
+    ],
+  },
+  {
     slug: 'movie-theater',
     at: 0.55,
-    hold: 3.8,
+    hold: 3.4,
     title: 'Movie Theater',
     blurb: 'A sealed room under a starlit ceiling.',
     hotspots: [
@@ -217,9 +285,39 @@ export const STOPS: StopDefinition[] = [
     ],
   },
   {
+    slug: 'pool-terrace-night',
+    at: 0.55,
+    hold: 3.4,
+    title: 'Pool Terrace',
+    blurb: 'Straight out of the theatre door onto the lit deck.',
+    hotspots: [
+      {
+        id: 'pool',
+        label: 'Lap pool',
+        text: 'Full-length pool lit electric blue, edged flush with the white tile.',
+        x: 33,
+        y: 74,
+      },
+      {
+        id: 'facade',
+        label: 'Glazed facade',
+        text: 'The house reading as a lantern end to end along the deck.',
+        x: 80,
+        y: 28,
+      },
+      {
+        id: 'wall',
+        label: 'Wall washers',
+        text: 'Sculpted uplights grazing the boundary wall the whole length of the terrace.',
+        x: 16,
+        y: 43,
+      },
+    ],
+  },
+  {
     slug: 'gym',
     at: 0.55,
-    hold: 3.8,
+    hold: 3.4,
     title: 'Gym',
     blurb: 'A full cardio floor set against the glazing, washed in colour.',
     hotspots: [
@@ -247,32 +345,32 @@ export const STOPS: StopDefinition[] = [
     ],
   },
   {
-    slug: 'pool-terrace-loungers',
+    slug: 'hair-salon',
     at: 0.55,
-    hold: 3.6,
-    title: 'Pool Terrace',
-    blurb: 'The lap pool running the length of the facade, lit from below.',
+    hold: 3.4,
+    title: 'Hair Salon',
+    blurb: 'A working salon built into the house, finished entirely in white.',
     hotspots: [
       {
-        id: 'pool',
-        label: 'Lap pool',
-        text: 'Full-length pool lit blue from within, edged flush with the deck.',
-        x: 28,
-        y: 77,
+        id: 'script',
+        label: 'Wall script',
+        text: '“In White, Beauty Finds Its Jolly” lettered across the panelling in gold.',
+        x: 51,
+        y: 50,
       },
       {
-        id: 'facade',
-        label: 'Facade',
-        text: 'The glazed elevation reading as a lantern from the terrace.',
-        x: 21,
-        y: 33,
+        id: 'chair',
+        label: 'Salon chair',
+        text: 'A single white chair, channel-stitched, facing the styling wall.',
+        x: 20,
+        y: 74,
       },
       {
-        id: 'wall',
-        label: 'Wall washers',
-        text: 'Downlights grazing the boundary wall along the whole terrace.',
-        x: 84,
-        y: 56,
+        id: 'counter',
+        label: 'Styling counter',
+        text: 'Counter with the extraction plate and basin built in flush.',
+        x: 72,
+        y: 84,
       },
     ],
   },

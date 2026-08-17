@@ -98,7 +98,7 @@ export function HeroOverlay() {
           <div className="mt-4 flex items-center gap-3">
             <span
               data-scroll-cue
-              className="block h-8 w-px bg-gradient-to-b from-transparent via-champagne/70 to-transparent"
+              className="scroll-cue block h-8 w-px bg-gradient-to-b from-transparent via-champagne/70 to-transparent"
             />
             <span className="tracked text-[9px] text-bone/50">Begin</span>
           </div>

@@ -5,6 +5,7 @@ import { ScrollController } from './ScrollController';
 import { VideoController } from './VideoController';
 import { SegmentResolver } from './SegmentResolver';
 import { InteractionManager, TourState } from './InteractionManager';
+import { PointerDrift } from './PointerDrift';
 import { buildTimeline, progressAtTime, Resolved, sample } from './Timeline';
 
 /** Scroll distance, in pixels, spent on one second of film. */
@@ -42,6 +43,7 @@ export class TourEngine {
   private scroll: ScrollController;
   private video: VideoController;
   private resolver = new SegmentResolver();
+  private drift: PointerDrift;
   readonly interactions = new InteractionManager();
   private trigger?: ScrollTrigger;
   private opening = gsap.timeline({ paused: true });
@@ -57,6 +59,8 @@ export class TourEngine {
       container: opts.videoLayer,
       onChapterChange: (chapter) => this.interactions.update({ chapter }),
     });
+
+    this.drift = new PointerDrift(opts.stage);
 
     this.applyHeight();
     this.buildOpeningTimeline();
@@ -205,6 +209,9 @@ export class TourEngine {
     // While a stop is explaining itself, the ambient panel stays out of the way.
     const panel = phase === 'tour' && !stop ? this.resolver.narratableAt(time) : null;
 
+    // The frame only answers the pointer while it is holding still.
+    this.drift.setStrength(phase === 'tour' && stop ? 1 : 0);
+
     this.interactions.update({
       phase,
       progress,
@@ -223,15 +230,39 @@ export class TourEngine {
     return progressAtTime(this.timeline, time);
   }
 
-  /** Jump the visitor to a chapter by scrolling, so the video follows naturally. */
-  seekToTime(time: number) {
+  /** The inverse: what a fraction of the walk lands on. Used by the scrub bar. */
+  timeAtWalkProgress(progress: number): number {
+    return sample(this.timeline, progress).time;
+  }
+
+  /** Where the walk pauses to explain itself, in order — for keyboard stepping. */
+  get stopTimes(): number[] {
+    return this.timeline.stops.map((s) => s.time);
+  }
+
+  /**
+   * Jump the visitor to a chapter by scrolling, so the video follows naturally.
+   *
+   * `immediate` skips the glide, which is what a drag on the scrub bar wants:
+   * easing toward a target that moves every frame never arrives.
+   */
+  seekToTime(time: number, immediate = false) {
     const { openEnd } = this.phaseBounds();
     const vh = window.innerHeight;
     const total = this.opts.section.offsetHeight - vh;
     // Convert through the timeline so dwell segments are accounted for.
     const p = openEnd + progressAtTime(this.timeline, time) * (1 - openEnd);
     const top = this.opts.section.offsetTop + p * total;
-    this.scroll.scrollTo(top);
+    this.scroll.scrollTo(top, { immediate });
+  }
+
+  /** Scrub straight to a fraction of the walk, dwells included. */
+  seekToWalkProgress(progress: number, immediate = false) {
+    const { openEnd } = this.phaseBounds();
+    const vh = window.innerHeight;
+    const total = this.opts.section.offsetHeight - vh;
+    const p = openEnd + Math.min(1, Math.max(0, progress)) * (1 - openEnd);
+    this.scroll.scrollTo(this.opts.section.offsetTop + p * total, { immediate });
   }
 
   private onResize() {
@@ -253,6 +284,7 @@ export class TourEngine {
     }
     this.trigger?.kill();
     this.opening.kill();
+    this.drift.destroy();
     this.video.destroy();
     this.interactions.destroy();
     this.scroll.destroy();

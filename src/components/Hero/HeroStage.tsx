@@ -13,7 +13,14 @@ import { HeroOverlay } from './HeroOverlay';
  *
  * They are declared here so the hero renders correctly before any JavaScript runs.
  */
-export function HeroStage({ children }: { children?: React.ReactNode }) {
+export function HeroStage({
+  children,
+  accent,
+}: {
+  children?: React.ReactNode;
+  /** Accent colour of the room on screen; lights the cove at the base. */
+  accent?: string;
+}) {
   return (
     <div
       data-stage
@@ -24,6 +31,7 @@ export function HeroStage({ children }: { children?: React.ReactNode }) {
           '--frame-inset-top': '0px',
           '--frame-inset-bottom': '0px',
           '--frame-radius': '0px',
+          ...(accent ? { '--cove-color': accent } : null),
         } as React.CSSProperties
       }
     >

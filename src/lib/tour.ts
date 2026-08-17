@@ -216,6 +216,20 @@ export function elapsed(time: number): number {
 }
 
 /**
+ * The space a given tour time falls in.
+ *
+ * A plain scan, for callers that ask occasionally and out of order — hovering
+ * the scrub bar, say. The walk itself uses SegmentResolver, which keeps a cursor
+ * because it asks about a slightly different time sixty times a second.
+ */
+export function spaceAt(time: number): Space {
+  for (const s of SPACES) {
+    if (time < s.end) return s;
+  }
+  return SPACES[SPACES.length - 1];
+}
+
+/**
  * Spaces worth surfacing a contextual panel for.
  *
  * Passages and very short beats are skipped — the architecture should carry the

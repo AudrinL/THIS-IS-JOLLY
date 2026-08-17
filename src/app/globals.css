@@ -47,6 +47,20 @@
   initial-value: 11px;
 }
 
+/*
+  The colour of the light spilling up from the base of the frame.
+
+  tour-map records an accentColor per space, read off the film — warm tungsten
+  through most of the house, and a hard blue at the pool. Following it means the
+  page is lit by the room the visitor is standing in. Registered so it can be
+  transitioned; a plain custom property would jump from room to room.
+*/
+@property --cove-color {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #fff3cf;
+}
+
 @layer base {
   * {
     -webkit-tap-highlight-color: transparent;
@@ -310,13 +324,74 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* Warm bloom, like the LED cove lighting spilling onto a wall. */
+  /* Warm bloom, like the LED cove lighting spilling onto a wall. Takes its
+     colour from whichever room is on screen — see --cove-color above. */
   .cove {
     background: radial-gradient(
       120% 80% at 50% 100%,
-      color-mix(in oklab, var(--color-champagne) 12%, transparent) 0%,
+      color-mix(in oklab, var(--cove-color, var(--color-champagne)) 13%, transparent) 0%,
       transparent 70%
     );
+    transition: --cove-color 1400ms var(--ease-cinema);
+  }
+
+  /*
+    Pointer drift.
+
+    Applied to the film and to the hotspot layer both, from properties written by
+    PointerDrift on the stage. Identical transforms on two boxes that share a
+    containing block keep every point welded to the feature it names — the
+    alternative, drifting the film alone, would slide the labels off their
+    subjects by exactly the amount that made the effect worth having.
+
+    Gated on the stage carrying `is-drifting`, which PointerDrift adds only while
+    a room is actually being held. This is not tidiness: a transform and a
+    will-change promote the film to its own compositing layer permanently, and
+    the glass above it then has to re-read that layer every seeked frame for the
+    whole walk — paying the cost of an effect that is switched off for most of it.
+  */
+  .is-drifting .drift {
+    transform: translate3d(var(--drift-x, 0px), var(--drift-y, 0px), 0)
+      scale(var(--drift-scale, 1));
+    will-change: transform;
+  }
+
+  /* The feature line swapping inside the room panel. Opacity and a few pixels —
+     no layout, so the panel around it never moves. */
+  .fade-line {
+    animation: line-in 420ms var(--ease-cinema) both;
+  }
+
+  @keyframes line-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* The line under "Begin": a slow travel down its own length, like a lift
+     indicator. It is the only thing on the hero that moves on its own. */
+  .scroll-cue {
+    mask-image: linear-gradient(to bottom, transparent, black 35%, black 65%, transparent);
+    animation: cue-travel 3.4s var(--ease-cinema) infinite;
+  }
+
+  @keyframes cue-travel {
+    0% {
+      transform: translateY(-30%);
+      opacity: 0;
+    }
+    35% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(30%);
+      opacity: 0;
+    }
   }
 }
 
