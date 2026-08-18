@@ -8,45 +8,45 @@ import { pad2 } from '@/lib/format';
 /**
  * What appears while the camera holds in a room.
  *
- * One point is explained at a time. The dwell is divided into a slot per
- * feature, so the room explains itself one thing at a time rather than fading
- * every card in at once and stacking them wherever two features sit close in
- * frame.
+ * Every point in the room is marked at once, and the room is read as one
+ * picture: three marks, three names, all of it there the moment the walk stops.
+ * Nothing arrives, nothing leaves, nothing takes its turn.
  *
  * ---------------------------------------------------------------------------
- * Where the words go, and why they are not beside the point
+ * Why it is not a sequence any more
  * ---------------------------------------------------------------------------
- * The first version put a glass card next to each hotspot. It read well in a
- * screenshot and badly in motion, for two reasons that turned out to be the
- * same reason.
+ * Cycling one feature at a time was a way of keeping cards from landing on top
+ * of each other — three glass panes in one frame will always collide somewhere.
+ * Once the panes went and the labels became plain type, the reason went with
+ * them: names set in small caps on a leader line take a fraction of the room and
+ * can all coexist.
  *
- * Cost: a card per point means mounting and unmounting a backdrop-filtered pane
- * three times per room, each one a fresh compositing layer over a video that is
- * being seeked every frame. Blurred panes over scrubbing video are the most
- * expensive thing on this page — globals.css says so at the bottom, where the
- * material was already cut back once for exactly this reason. Three of them
- * arriving and leaving inside four seconds is the stutter people report as the
- * site lagging.
+ * What that buys is the difference between being shown a room and looking at
+ * one. A sequence sets the pace and the order; the visitor waits through it, and
+ * scrubbing back to re-read something means finding the right part of the hold.
+ * All at once, the frame is a plan you read in whatever order you like — and the
+ * hold can be shorter, because nobody is waiting their turn.
  *
- * Composition: those cards also came and went in the middle of the frame, so
- * the architecture — the thing the visitor came for — spent the dwell being
- * covered up and uncovered by furniture of our own making.
+ * The panel below carries the sentence for whichever mark is pointed at. One
+ * pane, mounted once for the whole dwell, its text swapping inside it.
  *
- * So the pane count per room is now exactly one. The room's own panel, which was
- * already on screen, grew a line at the bottom that carries the active feature's
- * name and sentence; the text swaps inside a pane that never remounts. In frame,
- * the active point keeps only what has to be in frame to do its job: the mark, a
- * hairline leader, and its label set in plain type — no blur, no pane, no layer.
- * The sentence is read below, where the room is already being read.
- *
- * `progress` runs 0..1 across the hold and is driven by scroll, so the sequence
- * is scrubbable in both directions. Pointing at any mark takes it over and holds
- * it open; releasing hands the room back to the scroll.
+ * Entrances are staggered by a fraction of the dwell and derived from `progress`
+ * rather than animated, so the marks come in one after another as the room
+ * arrives and go back out in reverse when the visitor scrubs backwards.
  */
 
-/** The portion of the dwell spent cycling through hotspots. */
-const WINDOW_START = 0.1;
-const WINDOW_END = 0.86;
+/** Dwell fraction the first mark lands on, and the gap between the rest. */
+const MARK_START = 0.08;
+const MARK_STAGGER = 0.05;
+const MARK_FADE = 0.12;
+
+/**
+ * Where the room panel sits, in frame percentages, so labels can get out of its
+ * way. Generous rather than exact: the panel's width depends on its text and on
+ * whether the room rail is open, and a label that clears it by too much costs
+ * nothing while one that clears it by too little is a collision.
+ */
+const PANEL = { x0: 38, x1: 82, y0: 64 };
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
@@ -58,12 +58,12 @@ export function StopOverlay({
   progress: number;
 }) {
   /**
-   * The mark the visitor is pointing at, overriding the scroll-driven one.
+   * The mark the visitor is pointing at, or null.
    *
    * Nothing resets it, because nothing has to: the caller keys this component on
    * the room, so leaving one takes the state with it. That matters more than it
    * looks — a mark unmounting under the cursor never fires a leave, so a hold
-   * carried across rooms would open a label nobody is pointing at.
+   * carried across rooms would open a sentence nobody is pointing at.
    */
   const [heldIndex, setHeld] = useState<number | null>(null);
 
@@ -74,14 +74,7 @@ export function StopOverlay({
   const presence = Math.max(0, entering - leaving);
 
   const count = stop.hotspots.length;
-  const span = (WINDOW_END - WINDOW_START) / count;
-  const raw = (progress - WINDOW_START) / span;
-  const scrolledIndex = clamp(Math.floor(raw), 0, count - 1);
-  const activeIndex = heldIndex ?? scrolledIndex;
-  /** 0..1 within the active hotspot's own slot, for its entrance. */
-  const slot = heldIndex === null ? clamp(raw - scrolledIndex, 0, 1) : 1;
-  const started = progress >= WINDOW_START || heldIndex !== null;
-  const active = stop.hotspots[activeIndex];
+  const held = heldIndex === null ? null : stop.hotspots[heldIndex];
 
   return (
     <div className="pointer-events-none absolute inset-0 z-45">
@@ -94,16 +87,26 @@ export function StopOverlay({
       {/* The marks drift with the film, so they stay on their features. */}
       <div className="drift absolute inset-0">
         {stop.hotspots.map((spot, i) => {
-          const isActive = started && i === activeIndex;
-          const dotAlpha = presence * (isActive ? 1 : 0.38);
-          /** Label to the left of the point when the point is right of centre. */
+          const isHeld = i === heldIndex;
+          /* Each mark arrives on its own beat, and leaves with the room. */
+          const arrival = clamp((progress - (MARK_START + i * MARK_STAGGER)) / MARK_FADE, 0, 1);
+          const appear = presence * arrival;
+
+          /*
+           * Labels sit beside the point, on the side with more frame. Low in the
+           * picture they would run into the room panel, so there they go above
+           * the point instead, on a short vertical leader.
+           */
           const flipX = spot.x > 55;
+          const labelSpan = flipX ? [spot.x - 11, spot.x] : [spot.x, spot.x + 11];
+          const clashes =
+            spot.y > PANEL.y0 && labelSpan[1] > PANEL.x0 && labelSpan[0] < PANEL.x1;
 
           return (
             <div
               key={spot.id}
               className="absolute"
-              style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
+              style={{ left: `${spot.x}%`, top: `${spot.y}%`, opacity: appear }}
             >
               {/*
                 The mark, and the thing you point at. Its hit area is far larger
@@ -113,7 +116,7 @@ export function StopOverlay({
               <button
                 type="button"
                 aria-label={`${spot.label}. ${spot.text}`}
-                aria-pressed={isActive}
+                aria-pressed={isHeld}
                 tabIndex={presence > 0.5 ? 0 : -1}
                 onPointerEnter={(e) => {
                   if (e.pointerType === 'mouse') setHeld(i);
@@ -127,71 +130,87 @@ export function StopOverlay({
                 onBlur={() => setHeld(null)}
                 className={[
                   'absolute grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center',
-                  'rounded-full transition-opacity duration-500',
+                  'rounded-full',
                   presence > 0.5 ? 'pointer-events-auto cursor-pointer' : 'pointer-events-none',
                 ].join(' ')}
-                style={{ opacity: dotAlpha }}
               >
                 <span
                   aria-hidden
-                  className="block rounded-full bg-champagne transition-all duration-500 ease-[var(--ease-cinema)]"
+                  className="block rounded-full bg-champagne transition-all duration-300 ease-[var(--ease-cinema)]"
                   style={{
-                    width: isActive ? 9 : 5,
-                    height: isActive ? 9 : 5,
-                    boxShadow: isActive ? '0 0 14px 3px rgb(255 243 207 / 0.45)' : 'none',
+                    width: isHeld ? 9 : 5,
+                    height: isHeld ? 9 : 5,
+                    boxShadow: isHeld ? '0 0 14px 3px rgb(255 243 207 / 0.45)' : 'none',
                   }}
                 />
-                {isActive && (
-                  <span
-                    aria-hidden
-                    className="absolute top-1/2 left-1/2 size-[9px] rounded-full border border-champagne/60"
-                    style={{
-                      transform: `translate(-50%,-50%) scale(${1 + slot * 2.4})`,
-                      opacity: (1 - slot) * 0.85,
-                    }}
-                  />
-                )}
+                {/* One ring as the mark lands, and again when it is pointed at. */}
+                <span
+                  aria-hidden
+                  className="absolute top-1/2 left-1/2 size-[9px] rounded-full border border-champagne/60"
+                  style={{
+                    transform: `translate(-50%,-50%) scale(${1 + (1 - arrival) * 2.4})`,
+                    opacity: arrival < 1 ? arrival * (1 - arrival) * 3 : 0,
+                  }}
+                />
               </button>
 
               {/*
                 Leader and label. Plain type over the film — the shadow is what
                 keeps it legible against a lit wall, and it costs nothing to
-                composite. Rendered for the active point only.
+                composite.
               */}
-              {isActive && (
-                <div
-                  aria-hidden
-                  className="absolute top-1/2 flex -translate-y-1/2 items-center gap-2"
+              <div
+                aria-hidden
+                className={[
+                  'absolute flex items-center gap-2 transition-opacity duration-300',
+                  clashes ? 'flex-col' : '',
+                ].join(' ')}
+                style={
+                  clashes
+                    ? {
+                        bottom: 10,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        opacity: isHeld ? 1 : 0.72,
+                      }
+                    : {
+                        top: '50%',
+                        [flipX ? 'right' : 'left']: 10,
+                        transform: 'translateY(-50%)',
+                        flexDirection: flipX ? 'row-reverse' : 'row',
+                        opacity: isHeld ? 1 : 0.72,
+                      }
+                }
+              >
+                <span
+                  className={
+                    clashes
+                      ? 'block w-px bg-gradient-to-t from-champagne/70 to-champagne/20'
+                      : 'block h-px bg-gradient-to-r from-champagne/70 to-champagne/20'
+                  }
+                  style={clashes ? { height: 16 } : { width: 22 }}
+                />
+                <span
+                  className="tracked text-[8px] whitespace-nowrap transition-colors duration-300"
                   style={{
-                    [flipX ? 'right' : 'left']: 10,
-                    flexDirection: flipX ? 'row-reverse' : 'row',
-                    opacity: presence * Math.min(1, slot / 0.2),
-                    transition: 'opacity 260ms var(--ease-cinema)',
+                    color: isHeld ? 'var(--color-champagne)' : 'var(--color-linen)',
+                    textShadow: '0 1px 14px rgb(5 7 12 / 0.95), 0 0 3px rgb(5 7 12 / 0.8)',
                   }}
                 >
-                  <span
-                    className="block h-px bg-gradient-to-r from-champagne/70 to-champagne/20"
-                    style={{ width: 22 }}
-                  />
-                  <span
-                    className="tracked text-[8px] whitespace-nowrap text-linen"
-                    style={{ textShadow: '0 1px 14px rgb(5 7 12 / 0.95), 0 0 3px rgb(5 7 12 / 0.8)' }}
-                  >
-                    {spot.label}
-                  </span>
-                </div>
-              )}
+                  {spot.label}
+                </span>
+              </div>
             </div>
           );
         })}
       </div>
 
       {/*
-        The room, and whatever it is currently pointing at. One pane, mounted
-        once for the whole dwell. Offset so it clears the room rail on the left.
+        The room, and whatever is being pointed at in it. One pane, mounted once
+        for the whole dwell. Offset so it clears the room rail on the left.
       */}
       <div
-        className="absolute inset-x-0 bottom-[15%] flex justify-center pr-5 pl-[86px] lg:pr-10 lg:pl-[330px]"
+        className="absolute inset-x-0 bottom-[12%] flex justify-center pr-5 pl-[86px] lg:pr-10 lg:pl-[330px]"
         style={{ transform: `translateY(${(1 - presence) * 14}px)` }}
       >
         <LiquidGlass
@@ -203,9 +222,7 @@ export function StopOverlay({
         >
           <div className="flex items-baseline justify-between gap-6">
             <span className="tracked text-[8.5px] text-ash/70">{stop.space.category}</span>
-            <span className="text-[9px] text-ash/60 tabular-nums">
-              {pad2(activeIndex + 1)} / {pad2(count)}
-            </span>
+            <span className="text-[9px] text-ash/60 tabular-nums">{pad2(count)} marked</span>
           </div>
           <h3
             className="mt-2 text-[1.5rem] leading-[1.1] text-linen"
@@ -218,15 +235,23 @@ export function StopOverlay({
           </p>
 
           {/*
-            The active feature. Height is reserved rather than measured, so the
-            panel never changes size as the text swaps under it — a pane that
-            resized three times per room would draw the eye away from the room.
-            Keyed on the point so the fade replays on each change.
+            Whichever mark is being pointed at. Height is reserved rather than
+            measured, so the panel never changes size as the text swaps under it —
+            a pane that resized every time the cursor moved would draw the eye
+            away from the room. Keyed on the point so the fade replays.
           */}
           <div className="mt-3 border-t border-linen/10 pt-3">
-            <div key={active.id} className="fade-line min-h-[3.4rem]">
-              <div className="tracked text-[7.5px] text-champagne/85">{active.label}</div>
-              <p className="mt-1.5 text-[12px] leading-snug text-linen/90">{active.text}</p>
+            <div key={held?.id ?? 'idle'} className="fade-line min-h-[3.4rem]">
+              {held ? (
+                <>
+                  <div className="tracked text-[7.5px] text-champagne/85">{held.label}</div>
+                  <p className="mt-1.5 text-[12px] leading-snug text-linen/90">{held.text}</p>
+                </>
+              ) : (
+                <p className="text-[11.5px] leading-snug text-ash/60">
+                  Choose a mark to read it.
+                </p>
+              )}
             </div>
           </div>
         </LiquidGlass>

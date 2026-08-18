@@ -5,7 +5,9 @@ import { HeroStage } from '@/components/Hero/HeroStage';
 import { SpacePanel } from '@/components/GlassPanel/SpacePanel';
 import { TourHud } from './TourHud';
 import { RoomSidebar } from './RoomSidebar';
+import { FloorPlan } from './FloorPlan';
 import { StopOverlay } from './StopOverlay';
+import { ChapterTitle } from './ChapterTitle';
 import { CHAPTER_VIEWS } from '@/lib/tour';
 import { TourEngine } from '@/tour/TourEngine';
 import type { InteractionManager, TourState } from '@/tour/InteractionManager';
@@ -19,6 +21,7 @@ const INITIAL: TourState = {
   space: null,
   panel: null,
   stop: null,
+  intro: null,
 };
 
 function usePrefersReducedMotion(): boolean | null {
@@ -34,8 +37,8 @@ function usePrefersReducedMotion(): boolean | null {
 }
 
 /**
- * Isolated so that dwell progress — which updates continuously while the camera
- * holds — only ever re-renders the hotspots, never the tour around them.
+ * Isolated so that dwell progress — which updates continuously while a room is
+ * annotated — only ever re-renders the hotspots, never the tour around them.
  */
 function StopLayer({
   interactions,
@@ -62,6 +65,30 @@ function StopLayer({
   );
 }
 
+/** The same isolation for the chapter card's own fade. */
+function TitleLayer({
+  interactions,
+  state,
+}: {
+  interactions: InteractionManager | null;
+  state: TourState;
+}) {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (!interactions) return;
+    return interactions.subscribeIntro(setProgress);
+  }, [interactions]);
+
+  return (
+    <ChapterTitle
+      key={state.intro?.chapter.id ?? 'none'}
+      intro={state.intro}
+      progress={state.intro ? progress : 0}
+    />
+  );
+}
+
 export function Experience() {
   const sectionRef = useRef<HTMLElement>(null);
   const engineRef = useRef<TourEngine | null>(null);
@@ -83,8 +110,8 @@ export function Experience() {
     const engine = new TourEngine({ section, stage, videoLayer, reducedMotion: false });
     engineRef.current = engine;
     setInteractions(engine.interactions);
-    // Chapter positions come from the timeline, not from raw time: the dwell
-    // segments mean a chapter's start is not where linear time would put it.
+    // Chapter positions come from the timeline, not from raw time: excluded
+    // chapters mean a chapter's start is not where linear time would put it.
     setMarks(CHAPTER_VIEWS.map((c) => engine.progressAtTourTime(c.start)));
     const unsubscribe = engine.interactions.subscribe(setState);
 
@@ -165,12 +192,17 @@ export function Experience() {
         <HeroStage accent={state.space?.accentColor}>
           <div data-video-layer className="drift absolute inset-0 z-0" />
           <StopLayer interactions={interactions} state={state} />
+          <TitleLayer interactions={interactions} state={state} />
           <TourHud state={state} onSeek={seek} onScrub={scrub} timeAt={timeAt} />
           <SpacePanel space={state.panel} railOpen={railOpen} />
         </HeroStage>
       </section>
 
-      {/* Fixed, so it lives outside the stage's overflow clipping. */}
+      {/* Both fixed, so they live outside the stage's overflow clipping. The
+          plan sits opposite the rail: the index of the house on one side, where
+          you are in it on the other. */}
+      <FloorPlan state={state} interactions={interactions} onSeek={seek} />
+
       <RoomSidebar
         state={state}
         onSeek={seek}

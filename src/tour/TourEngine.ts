@@ -12,12 +12,13 @@ import { buildTimeline, progressAtTime, Resolved, sample } from './Timeline';
 const PX_PER_SECOND_DESKTOP = 46;
 const PX_PER_SECOND_TOUCH = 30;
 
-/** Scroll distance spent on one second of dwelling at a stop. */
-const DWELL_PX_PER_SECOND_DESKTOP = 190;
-const DWELL_PX_PER_SECOND_TOUCH = 130;
-
-/** Viewport heights held on the hero before anything begins to move. */
-const HERO_HOLD_VH = 1.0;
+/**
+ * Viewport heights held on the hero before anything begins to move. A beat,
+ * not a wall: at a full viewport this swallowed the better part of ten wheel
+ * notches with the frame pinned shut, and the site read as broken before it
+ * read as composed.
+ */
+const HERO_HOLD_VH = 0.35;
 /** Viewport heights over which the frame opens into full bleed. */
 const OPENING_VH = 0.85;
 
@@ -84,15 +85,11 @@ export class TourEngine {
   /**
    * Section height = hero hold + opening + the timeline's own length.
    *
-   * The timeline is rebuilt here because both budgets depend on the pointer
+   * The timeline is rebuilt here because its budget depends on the pointer
    * type, which can change when a hybrid device switches modes.
    */
   private applyHeight() {
-    const touch = window.matchMedia('(hover: none)').matches;
-    this.timeline = buildTimeline({
-      pxPerSecond: this.pxPerSecond(),
-      dwellPxPerSecond: touch ? DWELL_PX_PER_SECOND_TOUCH : DWELL_PX_PER_SECOND_DESKTOP,
-    });
+    this.timeline = buildTimeline({ pxPerSecond: this.pxPerSecond() });
     const vh = window.innerHeight;
     const total = vh * (HERO_HOLD_VH + OPENING_VH) + this.timeline.totalPx;
     this.opts.section.style.height = `${Math.round(total)}px`;
@@ -200,16 +197,18 @@ export class TourEngine {
   }
 
   private publish(phase: TourState['phase'], progress: number, timeFraction = progress) {
-    // The timeline maps scroll to time non-linearly: stretches of motion
-    // separated by holds where scrolling advances the explanation instead.
-    const { time, stop, dwellProgress } = sample(this.timeline, timeFraction);
+    // Scroll maps straight onto film time; the stops ride along on top of it.
+    const { time, stop, dwellProgress, intro, introProgress } = sample(this.timeline, timeFraction);
     this.video.setTime(time);
 
     const space = this.resolver.resolve(time);
-    // While a stop is explaining itself, the ambient panel stays out of the way.
-    const panel = phase === 'tour' && !stop ? this.resolver.narratableAt(time) : null;
+    // While a room is annotating itself or a chapter is announcing itself, the
+    // ambient panel stays out of the way — one thing to read at a time.
+    const panel =
+      phase === 'tour' && !stop && !intro ? this.resolver.narratableAt(time) : null;
 
-    // The frame only answers the pointer while it is holding still.
+    // The frame answers the pointer while a room is being annotated, where the
+    // marks give the parallax something to be measured against.
     this.drift.setStrength(phase === 'tour' && stop ? 1 : 0);
 
     this.interactions.update({
@@ -219,13 +218,18 @@ export class TourEngine {
       space,
       panel,
       stop: phase === 'tour' ? stop : null,
+      intro: phase === 'tour' ? intro : null,
       chapter: chapterAt(time),
     });
     if (stop) this.interactions.setDwell(dwellProgress);
+    if (intro) this.interactions.setIntro(introProgress);
     this.interactions.setProgress(phase === 'tour' ? progress : 0);
+    // The plan's marker rides film time directly, so it keeps moving through a
+    // room rather than only at its threshold.
+    this.interactions.setCamera(time);
   }
 
-  /** Where a given tour time falls as a fraction of the walk, dwells included. */
+  /** Where a given tour time falls as a fraction of the walk. */
   progressAtTourTime(time: number): number {
     return progressAtTime(this.timeline, time);
   }
@@ -235,7 +239,7 @@ export class TourEngine {
     return sample(this.timeline, progress).time;
   }
 
-  /** Where the walk pauses to explain itself, in order — for keyboard stepping. */
+  /** The frames the walk annotates, in order — for keyboard stepping. */
   get stopTimes(): number[] {
     return this.timeline.stops.map((s) => s.time);
   }
@@ -250,13 +254,13 @@ export class TourEngine {
     const { openEnd } = this.phaseBounds();
     const vh = window.innerHeight;
     const total = this.opts.section.offsetHeight - vh;
-    // Convert through the timeline so dwell segments are accounted for.
+    // Convert through the timeline so excluded chapters are accounted for.
     const p = openEnd + progressAtTime(this.timeline, time) * (1 - openEnd);
     const top = this.opts.section.offsetTop + p * total;
     this.scroll.scrollTo(top, { immediate });
   }
 
-  /** Scrub straight to a fraction of the walk, dwells included. */
+  /** Scrub straight to a fraction of the walk. */
   seekToWalkProgress(progress: number, immediate = false) {
     const { openEnd } = this.phaseBounds();
     const vh = window.innerHeight;

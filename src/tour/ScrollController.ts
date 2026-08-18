@@ -22,9 +22,12 @@ export class ScrollController {
     }
 
     this.lenis = new Lenis({
-      // Long, heavy glide — the camera should feel like it has mass.
-      lerp: 0.085,
-      wheelMultiplier: 0.9,
+      // A glide with mass, but one that answers the first notch. Below about
+      // 0.1 the lerp swallows a wheel tick whole — eight pixels on the first
+      // frame, half a second to arrive — and the page reads as unresponsive
+      // rather than heavy.
+      lerp: 0.12,
+      wheelMultiplier: 1,
       touchMultiplier: 1.4,
       smoothWheel: true,
     });
