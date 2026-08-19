@@ -85,7 +85,7 @@ export function FloorPlan({
         visible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
       ].join(' ')}
     >
-      <div className="w-[186px] sm:w-[220px]">
+      <div className="w-[224px] sm:w-[264px]">
         <Plate level={level} here={here?.area} walked={walked} showing={showing} onSeek={onSeek}>
           <Marker interactions={interactions} levelId={level.id} showing={showing} />
         </Plate>
@@ -96,7 +96,7 @@ export function FloorPlan({
           and this drawing is not, and the visitor is entitled to know which of
           the two they are looking at.
         */}
-        <p className="mt-1.5 text-right text-[9.5px] leading-tight">
+        <p className="mt-1.5 text-right text-[10.5px] leading-tight">
           <span className="text-linen/80">{here?.area.label ?? level.name}</span>
           <span className="text-ash/55"> · schematic</span>
         </p>
@@ -109,7 +109,7 @@ export function FloorPlan({
               tabIndex={-1}
               onClick={() => setPicked({ id: l.id, against: followed?.id })}
               className={[
-                'pointer-events-auto rounded-full px-1.5 py-0.5 text-[7px] tracking-[0.14em] uppercase',
+                'pointer-events-auto rounded-full px-1.5 py-0.5 text-[7.5px] tracking-[0.14em] uppercase',
                 'transition-colors duration-300',
                 l.id === level.id ? 'bg-linen/12 text-linen/80' : 'text-ash/50 hover:text-linen/70',
               ].join(' ')}
