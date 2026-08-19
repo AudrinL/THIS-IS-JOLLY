@@ -17,7 +17,7 @@ import {
 import type { InteractionManager, TourState } from '@/tour/InteractionManager';
 
 /**
- * The plan, upper right.
+ * The plan, lower right.
  *
  * A drawn floor plan with the visitor's own position and heading on it, so
  * anyone three minutes into a six-minute walk can see where in the house they
@@ -76,14 +76,13 @@ export function FloorPlan({
       className={[
         /*
           Aligned to the hero overlay's own padding — p-5 / sm:p-8 / lg:p-10 —
-          and dropped below the header, which is marked data-hero-persist and so
-          stays on screen for the whole walk. At the top of the viewport the
-          plan landed straight under the Enter the House button.
+          and lifted clear of the bottom of the viewport, where the scrubber
+          strip and the right-hand time readout already sit.
         */
         'pointer-events-none fixed z-40',
-        'top-[84px] right-5 sm:top-[96px] sm:right-8 lg:top-[104px] lg:right-10',
+        'right-5 bottom-[76px] sm:right-8 sm:bottom-[88px] lg:right-10 lg:bottom-[96px]',
         'transition-all duration-700 ease-[var(--ease-cinema)]',
-        visible ? 'translate-y-0 opacity-100' : '-translate-y-3 opacity-0',
+        visible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
       ].join(' ')}
     >
       <div className="w-[186px] sm:w-[220px]">
