@@ -85,7 +85,7 @@ export function FloorPlan({
         visible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
       ].join(' ')}
     >
-      <div className="w-[224px] sm:w-[264px]">
+      <div className="w-[246px] sm:w-[290px]">
         <Plate level={level} here={here?.area} walked={walked} showing={showing} onSeek={onSeek}>
           <Marker interactions={interactions} levelId={level.id} showing={showing} />
         </Plate>
