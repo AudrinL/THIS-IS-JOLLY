@@ -1,6 +1,7 @@
 'use client';
 
 import { HeroOverlay } from './HeroOverlay';
+import { heroPosterUrl } from '@/lib/media';
 
 /**
  * The stage is a single sticky viewport that never unmounts.
@@ -56,7 +57,7 @@ export function HeroStage({
           <picture>
             <img
               data-hero-poster
-              src="/media/posters/hero.png"
+              src={heroPosterUrl('png')}
               alt="A contemporary white hillside villa at dusk, lit from within, seen from the air"
               fetchPriority="high"
               decoding="async"

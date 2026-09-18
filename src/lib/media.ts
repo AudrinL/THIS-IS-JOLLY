@@ -27,7 +27,7 @@ export function spacePosterUrl(space: Space, format: 'avif' | 'jpg' = 'avif'): s
   return `${BASE}/posters/${space.slug}.${format}`;
 }
 
-export function heroPosterUrl(format: 'avif' | 'jpg' = 'avif'): string {
+export function heroPosterUrl(format: 'avif' | 'jpg' | 'png' = 'avif'): string {
   return `${BASE}/posters/hero.${format}`;
 }
 

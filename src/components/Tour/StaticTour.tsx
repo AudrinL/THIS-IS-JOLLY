@@ -1,7 +1,7 @@
 'use client';
 
 import { CHAPTER_VIEWS, tour, TOUR_DURATION, elapsed } from '@/lib/tour';
-import { spacePosterUrl } from '@/lib/media';
+import { heroPosterUrl, spacePosterUrl } from '@/lib/media';
 import { clock } from '@/lib/format';
 import { HeroOverlay } from '@/components/Hero/HeroOverlay';
 
@@ -21,7 +21,7 @@ export function StaticTour() {
             responsive set, and <picture> keeps it out of next/image's remit. */}
         <picture>
           <img
-            src="/media/posters/hero.png"
+            src={heroPosterUrl('png')}
             alt="A contemporary white hillside villa at night, lit from within, seen from the air"
             className="absolute inset-0 size-full object-cover opacity-80"
           />

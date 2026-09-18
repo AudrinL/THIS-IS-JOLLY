@@ -1,0 +1,9 @@
+# Netlify builds the static export and serves the `out/` folder as plain files.
+# The media is NOT here — it comes from Cloudflare R2 via NEXT_PUBLIC_MEDIA_BASE,
+# which is set in the Netlify UI (Site configuration → Environment variables).
+[build]
+  command = "npm run build:static"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "22"

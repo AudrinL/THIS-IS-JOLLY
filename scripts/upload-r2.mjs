@@ -44,6 +44,7 @@ const CONTENT_TYPE = {
   '.avif': 'image/avif',
   '.webp': 'image/webp',
   '.jpg': 'image/jpeg',
+  '.png': 'image/png',
   '.json': 'application/json',
 };
 
