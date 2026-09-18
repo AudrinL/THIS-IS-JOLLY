@@ -13,12 +13,13 @@ const PX_PER_SECOND_DESKTOP = 46;
 const PX_PER_SECOND_TOUCH = 30;
 
 /**
- * Viewport heights held on the hero before anything begins to move. A beat,
- * not a wall: at a full viewport this swallowed the better part of ten wheel
- * notches with the frame pinned shut, and the site read as broken before it
- * read as composed.
+ * Viewport heights held on the hero before anything begins to move. Zero: the
+ * first wheel notch opens the frame. Any hold at all — even a third of a
+ * viewport, which was several notches on a tall screen — read as the page not
+ * responding rather than as a composed pause, because nothing on screen
+ * acknowledged the scroll until it ended.
  */
-const HERO_HOLD_VH = 0.35;
+const HERO_HOLD_VH = 0;
 /** Viewport heights over which the frame opens into full bleed. */
 const OPENING_VH = 0.85;
 
