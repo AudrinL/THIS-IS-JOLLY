@@ -336,6 +336,17 @@
   }
 
   /*
+    The crop's focal point. On a phone the 16:9 film is cut down to its middle
+    third, and while a room is being annotated the stage pans the cut to keep
+    the marks in view. MobileChrome writes --focal-x on the stage; the <video>
+    elements are created outside React, so this is where they hear about it.
+  */
+  [data-video-layer] video {
+    object-position: var(--focal-x, 50%) 50%;
+    transition: object-position 900ms var(--ease-cinema);
+  }
+
+  /*
     Pointer drift.
 
     Applied to the film and to the hotspot layer both, from properties written by

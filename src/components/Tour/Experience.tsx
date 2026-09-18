@@ -12,6 +12,8 @@ import { CHAPTER_VIEWS } from '@/lib/tour';
 import { TourEngine } from '@/tour/TourEngine';
 import type { InteractionManager, TourState } from '@/tour/InteractionManager';
 import { StaticTour } from './StaticTour';
+import { MobileChrome } from './MobileChrome';
+import { useIsPhone } from '@/lib/useIsPhone';
 
 const INITIAL: TourState = {
   phase: 'hero',
@@ -97,6 +99,7 @@ export function Experience() {
   const [railOpen, setRailOpen] = useState(false);
   const [marks, setMarks] = useState<number[]>([]);
   const reduced = usePrefersReducedMotion();
+  const phone = useIsPhone();
 
   useEffect(() => {
     if (reduced !== false) return;
@@ -184,6 +187,13 @@ export function Experience() {
 
   const seek = (t: number) => engineRef.current?.seekToTime(t);
 
+  /*
+   * One stage, two sets of chrome. The engine, the film and the title cards
+   * are shared; what differs is how the interface is arranged around them.
+   * On a phone the rail, plan, room card, stop card and HUD fold into a bar
+   * along the bottom edge (MobileChrome). `phone` is null for the first
+   * client render, which draws the desktop set — the markup the server sent.
+   */
   return (
     <>
       <section ref={sectionRef} className="relative" style={{ height: '220svh' }}>
@@ -191,25 +201,41 @@ export function Experience() {
             screen — warm through the house, hard blue at the pool. */}
         <HeroStage accent={state.space?.accentColor}>
           <div data-video-layer className="drift absolute inset-0 z-0" />
-          <StopLayer interactions={interactions} state={state} />
           <TitleLayer interactions={interactions} state={state} />
-          <TourHud state={state} onSeek={seek} onScrub={scrub} timeAt={timeAt} />
-          <SpacePanel space={state.panel} railOpen={railOpen} />
+          {phone ? (
+            <MobileChrome
+              state={state}
+              interactions={interactions}
+              onSeek={seek}
+              onScrub={scrub}
+              timeAt={timeAt}
+            />
+          ) : (
+            <>
+              <StopLayer interactions={interactions} state={state} />
+              <TourHud state={state} onSeek={seek} onScrub={scrub} timeAt={timeAt} />
+              <SpacePanel space={state.panel} railOpen={railOpen} />
+            </>
+          )}
         </HeroStage>
       </section>
 
       {/* Both fixed, so they live outside the stage's overflow clipping. The
           plan sits opposite the rail: the index of the house on one side, where
           you are in it on the other. */}
-      <FloorPlan state={state} interactions={interactions} onSeek={seek} />
+      {!phone && (
+        <>
+          <FloorPlan state={state} interactions={interactions} onSeek={seek} />
 
-      <RoomSidebar
-        state={state}
-        onSeek={seek}
-        onOpenChange={setRailOpen}
-        interactions={interactions}
-        marks={marks}
-      />
+          <RoomSidebar
+            state={state}
+            onSeek={seek}
+            onOpenChange={setRailOpen}
+            interactions={interactions}
+            marks={marks}
+          />
+        </>
+      )}
     </>
   );
 }

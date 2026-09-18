@@ -86,16 +86,22 @@ export function HeroOverlay() {
 
       <div className="flex-1" />
 
-      {/* ---- bottom: tagline, call to action, figures ------------------ */}
-      <footer className="flex items-end justify-between gap-6">
+      {/* ---- bottom: tagline, call to action, figures ------------------
+          On a phone the foot stacks: tagline, then the call to action set
+          full width where the thumb already is. The scroll cue goes — a
+          thumb does not need telling which way a page scrolls, and the
+          button says "begin" more plainly than a hairline. From sm up the
+          row is the reference's: tagline left, figures right, and on wide
+          screens the call to action between them. */}
+      <footer className="flex flex-col gap-5 pb-[env(safe-area-inset-bottom)] sm:flex-row sm:items-end sm:justify-between sm:gap-6 sm:pb-0">
         <div data-hero-text>
           <p
-            className="max-w-[15ch] text-balance text-[clamp(1rem,2vw,1.5rem)] leading-[1.15] text-linen"
+            className="max-w-[15ch] text-balance text-[clamp(1.25rem,2vw,1.5rem)] leading-[1.15] text-linen sm:text-[clamp(1rem,2vw,1.5rem)]"
             style={{ fontFamily: 'var(--font-editorial)' }}
           >
             Closer to the house, closer to the light.
           </p>
-          <div className="mt-4 flex items-center gap-3">
+          <div className="mt-4 hidden items-center gap-3 sm:flex">
             <span
               data-scroll-cue
               className="scroll-cue block h-8 w-px bg-gradient-to-b from-transparent via-champagne/70 to-transparent"
@@ -105,8 +111,8 @@ export function HeroOverlay() {
         </div>
 
         {/* the reference repeats its call to action at the foot of the frame */}
-        <div className="hidden flex-1 justify-center pb-1 lg:flex">
-          <Cta label="Begin the tour" short="Begin" size="large" />
+        <div data-hero-text className="flex justify-stretch sm:hidden lg:flex lg:flex-1 lg:justify-center lg:pb-1">
+          <Cta label="Begin the tour" short="Begin the tour" size="large" wide />
         </div>
 
         {/* two figures, stacked — the architecture stays the subject */}
@@ -162,20 +168,28 @@ function Cta({
   label,
   short,
   size = 'small',
+  wide = false,
 }: {
   label: string;
   short: string;
   size?: 'small' | 'large';
+  /** Phone: fills its row, the label centred and the arrow at the end. */
+  wide?: boolean;
 }) {
   const large = size === 'large';
 
   return (
-    <LiquidGlass variant="soft" radius={999} beads="none" className="pointer-events-auto">
+    <LiquidGlass
+      variant="soft"
+      radius={999}
+      beads="none"
+      className={`pointer-events-auto ${wide ? 'w-full sm:w-auto' : ''}`}
+    >
       <a
         href="#tour"
         className={`tracked-tight group flex items-center gap-3 text-linen transition-colors duration-300 hover:text-champagne ${
           large ? 'py-2.5 pr-2.5 pl-6 text-[11px]' : 'py-2 pr-2 pl-5 text-[10px]'
-        }`}
+        } ${wide ? 'w-full justify-between sm:w-auto sm:justify-start' : ''}`}
       >
         <span className="hidden sm:inline">{label}</span>
         <span className="sm:hidden">{short}</span>

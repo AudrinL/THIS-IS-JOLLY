@@ -52,23 +52,7 @@ export function FloorPlan({
   interactions: InteractionManager | null;
   onSeek: (time: number) => void;
 }) {
-  const here = locate(state.space?.id);
-  const walked = here ? areaOrder(here.area) : -1;
   const visible = state.phase === 'tour';
-
-  /*
-   * The plate follows the walk, but a visitor who taps another floor keeps it
-   * until the walk crosses a storey itself — at which point their pick is stale
-   * and the plan goes back to answering the question it is there for. The pick
-   * remembers which plate it was made against rather than being cleared by an
-   * effect, so it resolves during render and there is never a frame showing the
-   * floor the visitor has just left.
-   */
-  const followed = here?.level ?? null;
-  const [picked, setPicked] = useState<{ id: string; against?: string } | null>(null);
-  const live = picked && picked.against === followed?.id ? picked.id : followed?.id;
-  const level = PLAN_LEVELS.find((l) => l.id === live) ?? PLAN_LEVELS[0];
-  const showing = level.id === followed?.id;
 
   return (
     <div
@@ -85,41 +69,94 @@ export function FloorPlan({
         visible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
       ].join(' ')}
     >
-      <div className="w-[246px] sm:w-[290px]">
-        <Plate level={level} here={here?.area} walked={walked} showing={showing} onSeek={onSeek}>
-          <Marker interactions={interactions} levelId={level.id} showing={showing} />
-        </Plate>
+      <PlanView
+        state={state}
+        interactions={interactions}
+        onSeek={onSeek}
+        className="w-[246px] sm:w-[290px]"
+      />
+    </div>
+  );
+}
 
-        {/*
-          Naming the lit room, and saying plainly what the drawing is. The
-          second half never changes and it is not decoration — the house is real
-          and this drawing is not, and the visitor is entitled to know which of
-          the two they are looking at.
-        */}
-        <p className="mt-1.5 text-right text-[10.5px] leading-tight">
-          <span className="text-linen/80">{here?.area.label ?? level.name}</span>
-          <span className="text-ash/55"> · schematic</span>
-        </p>
+/**
+ * The plan itself: plate, marker, caption and floor tabs. Shared between the
+ * desktop corner and the phone's plan sheet, which draws it at the width of
+ * the screen. The size is the caller's; everything inside scales with it,
+ * because the plate is an SVG and the type steps up with `large`.
+ */
+export function PlanView({
+  state,
+  interactions,
+  onSeek,
+  className = '',
+  large = false,
+}: {
+  state: TourState;
+  interactions: InteractionManager | null;
+  onSeek: (time: number) => void;
+  className?: string;
+  /** Phone sheet: type sized for a thumb rather than a corner. */
+  large?: boolean;
+}) {
+  const here = locate(state.space?.id);
+  const walked = here ? areaOrder(here.area) : -1;
 
-        <div className="mt-1 flex justify-end gap-1">
-          {PLAN_LEVELS.map((l) => (
-            <button
-              key={l.id}
-              type="button"
-              tabIndex={-1}
-              onClick={() => setPicked({ id: l.id, against: followed?.id })}
-              className={[
-                'pointer-events-auto rounded-full px-1.5 py-0.5 text-[7.5px] tracking-[0.14em] uppercase',
-                'transition-colors duration-300',
-                l.id === level.id ? 'bg-linen/12 text-linen/80' : 'text-ash/50 hover:text-linen/70',
-              ].join(' ')}
-            >
-              {/* The full name does not fit at this size, and the plate below is
-                  already saying which floor this is. */}
-              {l.id === 'lower' ? 'Lower' : l.name}
-            </button>
-          ))}
-        </div>
+  /*
+   * The plate follows the walk, but a visitor who taps another floor keeps it
+   * until the walk crosses a storey itself — at which point their pick is stale
+   * and the plan goes back to answering the question it is there for. The pick
+   * remembers which plate it was made against rather than being cleared by an
+   * effect, so it resolves during render and there is never a frame showing the
+   * floor the visitor has just left.
+   */
+  const followed = here?.level ?? null;
+  const [picked, setPicked] = useState<{ id: string; against?: string } | null>(null);
+  const live = picked && picked.against === followed?.id ? picked.id : followed?.id;
+  const level = PLAN_LEVELS.find((l) => l.id === live) ?? PLAN_LEVELS[0];
+  const showing = level.id === followed?.id;
+
+  return (
+    <div className={className}>
+      <Plate level={level} here={here?.area} walked={walked} showing={showing} onSeek={onSeek}>
+        <Marker interactions={interactions} levelId={level.id} showing={showing} />
+      </Plate>
+
+      {/*
+        Naming the lit room, and saying plainly what the drawing is. The
+        second half never changes and it is not decoration — the house is real
+        and this drawing is not, and the visitor is entitled to know which of
+        the two they are looking at.
+      */}
+      <p
+        className={[
+          'mt-1.5 text-right leading-tight',
+          large ? 'text-[13px]' : 'text-[10.5px]',
+        ].join(' ')}
+      >
+        <span className="text-linen/80">{here?.area.label ?? level.name}</span>
+        <span className="text-ash/55"> · schematic</span>
+      </p>
+
+      <div className={['mt-1 flex justify-end', large ? 'gap-2' : 'gap-1'].join(' ')}>
+        {PLAN_LEVELS.map((l) => (
+          <button
+            key={l.id}
+            type="button"
+            tabIndex={large ? 0 : -1}
+            onClick={() => setPicked({ id: l.id, against: followed?.id })}
+            className={[
+              'pointer-events-auto rounded-full tracking-[0.14em] uppercase',
+              large ? 'px-3 py-1.5 text-[10px]' : 'px-1.5 py-0.5 text-[7.5px]',
+              'transition-colors duration-300',
+              l.id === level.id ? 'bg-linen/12 text-linen/80' : 'text-ash/50 hover:text-linen/70',
+            ].join(' ')}
+          >
+            {/* The full name does not fit at this size, and the plate below is
+                already saying which floor this is. */}
+            {l.id === 'lower' ? 'Lower' : l.name}
+          </button>
+        ))}
       </div>
     </div>
   );

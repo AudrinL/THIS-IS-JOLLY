@@ -8,9 +8,16 @@ import { InteractionManager, TourState } from './InteractionManager';
 import { PointerDrift } from './PointerDrift';
 import { buildTimeline, progressAtTime, Resolved, sample } from './Timeline';
 
-/** Scroll distance, in pixels, spent on one second of film. */
+/**
+ * Scroll distance, in pixels, spent on one second of film.
+ *
+ * Touch is set higher than it used to be, not lower: a thumb flick on a phone
+ * travels a screen and a half with momentum behind it, and at thirty pixels a
+ * second that was a whole room gone in one gesture. Forty gives a flick about
+ * twenty seconds of house, which is a room looked at rather than passed.
+ */
 const PX_PER_SECOND_DESKTOP = 46;
-const PX_PER_SECOND_TOUCH = 30;
+const PX_PER_SECOND_TOUCH = 40;
 
 /**
  * Viewport heights held on the hero before anything begins to move. Zero: the

@@ -58,6 +58,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: '#05070c',
   colorScheme: 'dark',
+  // The stage runs under the home indicator on a phone; the bar along the
+  // bottom pads itself with env(safe-area-inset-bottom) instead.
+  viewportFit: 'cover',
 };
 
 /**
