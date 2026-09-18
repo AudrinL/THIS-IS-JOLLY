@@ -1,0 +1,28 @@
+HTTP/1.1 308 Permanent Redirect
+Content-Security-Policy: frame-ancestors *
+Date: Fri, 18 Sep 2026 11:46:33 GMT
+Location: /Alfursan
+Refresh: 0;url=/Alfursan
+X-Frame-Options: ALLOWALL
+Transfer-Encoding: chunked
+
+HTTP/1.1 307 Temporary Redirect
+Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate
+Content-Security-Policy: frame-ancestors *
+Date: Fri, 18 Sep 2026 11:46:33 GMT
+Location: /Alfursan/Zone_All
+X-Frame-Options: ALLOWALL
+Content-Type: text/plain; charset=utf-8
+Transfer-Encoding: chunked
+
+HTTP/1.1 200 OK
+Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate
+Content-Security-Policy: frame-ancestors *
+Content-Type: text/html; charset=utf-8
+Date: Fri, 18 Sep 2026 11:46:34 GMT
+Etag: "b1bzby6skz4v7b"
+Vary: Accept-Encoding
+X-Frame-Options: ALLOWALL
+X-Powered-By: Next.js
+Transfer-Encoding: chunked
+

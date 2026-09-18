@@ -47,12 +47,22 @@ export function Footer() {
 
         <div className="mt-12 flex items-center justify-between border-t border-linen/10 pt-8">
           <span className="tracked text-[9px] text-ash/50">{tour.property.title}</span>
-          <a
-            href="#tour"
-            className="tracked text-[9px] text-ash/60 transition-colors hover:text-linen"
-          >
-            Back to the top
-          </a>
+          <div className="flex items-center gap-6">
+            <a
+              href="https://audrin.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="tracked text-[9px] text-ash/60 transition-colors hover:text-linen"
+            >
+              Developed by Audrin ↗
+            </a>
+            <a
+              href="#tour"
+              className="tracked text-[9px] text-ash/60 transition-colors hover:text-linen"
+            >
+              Back to the top
+            </a>
+          </div>
         </div>
       </div>
 

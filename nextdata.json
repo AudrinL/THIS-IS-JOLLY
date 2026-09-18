@@ -1,0 +1,697 @@
+{
+ "props": {
+  "pageProps": {
+   "featuredOffers": [
+    {
+     "id": 10629,
+     "attributes": {
+      "Number": "04",
+      "Area": 168.2,
+      "SharedArea": 58.42,
+      "NumberOfBedrooms": 3,
+      "NumberOfBathrooms": 3,
+      "NumberOfRooms": 6,
+      "Price": 752000,
+      "Status": "Sold",
+      "Side": "North",
+      "Type": "D_F",
+      "ConstructionStartDate": "2025-11-21",
+      "ConstructionEndDate": "2027-11-15",
+      "ProjectStartData": "2024-10-06",
+      "ProjectEndDate": "2028-04-05",
+      "Notes": "note",
+      "SalePhase": 1,
+      "createdAt": "2025-04-29T12:43:02.734Z",
+      "updatedAt": "2025-04-30T08:05:17.476Z",
+      "publishedAt": "2025-04-29T12:43:02.727Z",
+      "ApartmentName": "Al Baylasan",
+      "Duplex": 0,
+      "Balcony": 1,
+      "Block": 299,
+      "FeaturedOffer": "yes",
+      "ExternalId": "299-A5-2-24",
+      "Floor": {
+       "data": [
+        {
+         "id": 1990,
+         "attributes": {
+          "FloorNumber": 2,
+          "createdAt": "2025-04-29T12:42:46.574Z",
+          "updatedAt": "2025-04-29T12:42:46.574Z",
+          "publishedAt": "2025-04-29T12:42:46.573Z",
+          "Building": {
+           "data": {
+            "id": 278,
+            "attributes": {
+             "Name": "Alfursan_A5V",
+             "Zone": "Zone_C",
+             "Project": "Alfursan",
+             "Disabled": "no",
+             "createdAt": "2025-03-07T15:19:16.278Z",
+             "updatedAt": "2025-04-29T12:42:40.683Z",
+             "publishedAt": "2025-03-07T15:19:16.273Z"
+            }
+           }
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": 10631,
+     "attributes": {
+      "Number": "02",
+      "Area": 155.97,
+      "SharedArea": 54.17,
+      "NumberOfBedrooms": 3,
+      "NumberOfBathrooms": 3,
+      "NumberOfRooms": 6,
+      "Price": 770000,
+      "Status": "Available",
+      "Side": "North",
+      "Type": "A_F",
+      "ConstructionStartDate": "2025-11-21",
+      "ConstructionEndDate": "2027-11-15",
+      "ProjectStartData": "2024-10-06",
+      "ProjectEndDate": "2028-04-05",
+      "Notes": "note",
+      "SalePhase": 1,
+      "createdAt": "2025-04-29T12:43:02.869Z",
+      "updatedAt": "2025-04-30T08:06:30.376Z",
+      "publishedAt": "2025-04-29T12:43:02.863Z",
+      "ApartmentName": "Al Afnan",
+      "Duplex": 0,
+      "Balcony": 0,
+      "Block": 299,
+      "FeaturedOffer": "yes",
+      "ExternalId": "299-A5-3-32",
+      "Floor": {
+       "data": [
+        {
+         "id": 1991,
+         "attributes": {
+          "FloorNumber": 3,
+          "createdAt": "2025-04-29T12:42:46.626Z",
+          "updatedAt": "2025-04-29T12:42:46.626Z",
+          "publishedAt": "2025-04-29T12:42:46.625Z",
+          "Building": {
+           "data": {
+            "id": 278,
+            "attributes": {
+             "Name": "Alfursan_A5V",
+             "Zone": "Zone_C",
+             "Project": "Alfursan",
+             "Disabled": "no",
+             "createdAt": "2025-03-07T15:19:16.278Z",
+             "updatedAt": "2025-04-29T12:42:40.683Z",
+             "publishedAt": "2025-03-07T15:19:16.273Z"
+            }
+           }
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": 10656,
+     "attributes": {
+      "Number": "03",
+      "Area": 57.68,
+      "SharedArea": 14.88,
+      "NumberOfBedrooms": 1,
+      "NumberOfBathrooms": 1,
+      "NumberOfRooms": 6,
+      "Price": 253000,
+      "Status": "Sold",
+      "Side": "North",
+      "Type": "B_F",
+      "ConstructionStartDate": "2025-11-21",
+      "ConstructionEndDate": "2027-11-15",
+      "ProjectStartData": "2024-10-06",
+      "ProjectEndDate": "2028-04-05",
+      "Notes": "note",
+      "SalePhase": 1,
+      "createdAt": "2025-04-29T12:43:04.368Z",
+      "updatedAt": "2025-04-30T08:08:47.944Z",
+      "publishedAt": "2025-04-29T12:43:04.364Z",
+      "ApartmentName": "Al Marjan",
+      "Duplex": 0,
+      "Balcony": 1,
+      "Block": 299,
+      "FeaturedOffer": "yes",
+      "ExternalId": "299-B6-1-13",
+      "Floor": {
+       "data": [
+        {
+         "id": 1997,
+         "attributes": {
+          "FloorNumber": 1,
+          "createdAt": "2025-04-29T12:42:46.960Z",
+          "updatedAt": "2025-04-29T12:42:46.960Z",
+          "publishedAt": "2025-04-29T12:42:46.959Z",
+          "Building": {
+           "data": {
+            "id": 280,
+            "attributes": {
+             "Name": "Alfursan_B6V",
+             "Zone": "Zone_C",
+             "Project": "Alfursan",
+             "Disabled": "no",
+             "createdAt": "2025-03-07T15:19:16.906Z",
+             "updatedAt": "2025-04-29T12:42:40.909Z",
+             "publishedAt": "2025-03-07T15:19:16.905Z"
+            }
+           }
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": 10717,
+     "attributes": {
+      "Number": "04",
+      "Area": 214.96,
+      "SharedArea": 55.55,
+      "NumberOfBedrooms": 4,
+      "NumberOfBathrooms": 5,
+      "NumberOfRooms": 6,
+      "Price": 979000,
+      "Status": "Sold",
+      "Side": "North",
+      "Type": "C_F",
+      "ConstructionStartDate": "2025-11-21",
+      "ConstructionEndDate": "2027-11-15",
+      "ProjectStartData": "2024-10-06",
+      "ProjectEndDate": "2028-04-05",
+      "Notes": "note",
+      "SalePhase": 2,
+      "createdAt": "2025-04-29T12:43:08.171Z",
+      "updatedAt": "2025-04-30T08:09:34.895Z",
+      "publishedAt": "2025-04-29T12:43:08.164Z",
+      "ApartmentName": "Al Sultan Duplex",
+      "Duplex": 1,
+      "Balcony": 1,
+      "Block": 299,
+      "FeaturedOffer": "yes",
+      "ExternalId": "299-C5-3-34",
+      "Floor": {
+       "data": [
+        {
+         "id": 2007,
+         "attributes": {
+          "FloorNumber": 3,
+          "createdAt": "2025-04-29T12:42:47.529Z",
+          "updatedAt": "2025-04-29T12:42:47.529Z",
+          "publishedAt": "2025-04-29T12:42:47.527Z",
+          "Building": {
+           "data": {
+            "id": 282,
+            "attributes": {
+             "Name": "Alfursan_C5V",
+             "Zone": "Zone_C",
+             "Project": "Alfursan",
+             "Disabled": "no",
+             "createdAt": "2025-03-07T15:19:17.462Z",
+             "updatedAt": "2025-04-29T12:42:41.141Z",
+             "publishedAt": "2025-03-07T15:19:17.461Z"
+            }
+           }
+          }
+         }
+        },
+        {
+         "id": 2008,
+         "attributes": {
+          "FloorNumber": 4,
+          "createdAt": "2025-04-29T12:42:47.586Z",
+          "updatedAt": "2025-04-29T12:42:47.586Z",
+          "publishedAt": "2025-04-29T12:42:47.585Z",
+          "Building": {
+           "data": {
+            "id": 282,
+            "attributes": {
+             "Name": "Alfursan_C5V",
+             "Zone": "Zone_C",
+             "Project": "Alfursan",
+             "Disabled": "no",
+             "createdAt": "2025-03-07T15:19:17.462Z",
+             "updatedAt": "2025-04-29T12:42:41.141Z",
+             "publishedAt": "2025-03-07T15:19:17.461Z"
+            }
+           }
+          }
+         }
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "apartments": [
+    {
+     "id": 10622,
+     "attributes": {
+      "createdAt": "2025-04-29T12:43:02.304Z",
+      "Number": "01",
+      "Area": 170.52,
+      "SharedArea": 59.22,
+      "NumberOfBedrooms": 3,
+      "NumberOfBathrooms": 3,
+      "NumberOfRooms": 6,
+      "Price": 761000,
+      "Status": "Sold",
+      "Side": "North",
+      "Type": "D_F",
+      "ConstructionStartDate": "2025-11-21",
+      "ConstructionEndDate": "2027-11-15",
+      "ProjectStartData": "2024-10-06",
+      "ProjectEndDate": "2028-04-05",
+      "Notes": "note",
+      "SalePhase": 1,
+      "updatedAt": "2025-04-29T12:43:33.912Z",
+      "publishedAt": "2025-04-29T12:43:02.298Z",
+      "ApartmentName": "Al Baylasan",
+      "Duplex": 0,
+      "Balcony": 1,
+      "Block": 299,
+      "FeaturedOffer": "no",
+      "ExternalId": "299-A5-1-11",
+      "Floor": {
+       "data": [
+        {
+         "id": 1989,
+         "attributes": {
+          "FloorNumber": 1,
+          "createdAt": "2025-04-29T12:42:46.515Z",
+          "updatedAt": "2025-04-29T12:42:46.515Z",
+          "publishedAt": "2025-04-29T12:42:46.513Z",
+          "Building": {
+           "data": {
+            "id": 278,
+            "attributes": {
+             "Name": "Alfursan_A5V",
+             "Zone": "Zone_C",
+             "Project": "Alfursan",
+             "Disabled": "no",
+             "createdAt": "2025-03-07T15:19:16.278Z",
+             "updatedAt": "2025-04-29T12:42:40.683Z",
+             "publishedAt": "2025-03-07T15:19:16.273Z"
+            }
+           }
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": 10623,
+     "attributes": {
+      "createdAt": "2025-04-29T12:43:02.371Z",
+      "Number": "02",
+      "Area": 171.1,
+      "SharedArea": 59.43,
+      "NumberOfBedrooms": 3,
+      "NumberOfBathrooms": 3,
+      "NumberOfRooms": 6,
+      "Price": 772000,
+      "Status": "Sold",
+      "Side": "North",
+      "Type": "D_F",
+      "ConstructionStartDate": "2025-11-21",
+      "ConstructionEndDate": "2027-11-15",
+      "ProjectStartData": "2024-10-06",
+      "ProjectEndDate": "2028-04-05",
+      "Notes": "note",
+      "SalePhase": 1,
+      "updatedAt": "2025-04-29T12:43:33.986Z",
+      "publishedAt": "2025-04-29T12:43:02.366Z",
+      "ApartmentName": "Al Baylasan",
+      "Duplex": 0,
+      "Balcony": 1,
+      "Block": 299,
+      "FeaturedOffer": "no",
+      "ExternalId": "299-A5-1-12",
+      "Floor": {
+       "data": [
+        {
+         "id": 1989,
+         "attributes": {
+          "FloorNumber": 1,
+          "createdAt": "2025-04-29T12:42:46.515Z",
+          "updatedAt": "2025-04-29T12:42:46.515Z",
+          "publishedAt": "2025-04-29T12:42:46.513Z",
+          "Building": {
+           "data": {
+            "id": 278,
+            "attributes": {
+             "Name": "Alfursan_A5V",
+             "Zone": "Zone_C",
+             "Project": "Alfursan",
+             "Disabled": "no",
+             "createdAt": "2025-03-07T15:19:16.278Z",
+             "updatedAt": "2025-04-29T12:42:40.683Z",
+             "publishedAt": "2025-03-07T15:19:16.273Z"
+            }
+           }
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": 10624,
+     "attributes": {
+      "createdAt": "2025-04-29T12:43:02.431Z",
+      "Number": "03",
+      "Area": 171.1,
+      "SharedArea": 59.43,
+      "NumberOfBedrooms": 3,
+      "NumberOfBathrooms": 3,
+      "NumberOfRooms": 6,
+      "Price": 772000,
+      "Status": "Sold",
+      "Side": "North",
+      "Type": "D_F",
+      "ConstructionStartDate": "2025-11-21",
+      "ConstructionEndDate": "2027-11-15",
+      "ProjectStartData": "2024-10-06",
+      "ProjectEndDate": "2028-04-05",
+      "Notes": "note",
+      "SalePhase": 1,
+      "updatedAt": "2025-04-29T12:43:34.058Z",
+      "publishedAt": "2025-04-29T12:43:02.426Z",
+      "ApartmentName": "Al Baylasan",
+      "Duplex": 0,
+      "Balcony": 1,
+      "Block": 299,
+      "FeaturedOffer": "no",
+      "ExternalId": "299-A5-1-13",
+      "Floor": {
+       "data": [
+        {
+         "id": 1989,
+         "attributes": {
+          "FloorNumber": 1,
+          "createdAt": "2025-04-29T12:42:46.515Z",
+          "updatedAt": "2025-04-29T12:42:46.515Z",
+          "publishedAt": "2025-04-29T12:42:46.513Z",
+          "Building": {
+           "data": {
+            "id": 278,
+            "attributes": {
+             "Name": "Alfursan_A5V",
+             "Zone": "Zone_C",
+             "Project": "Alfursan",
+             "Disabled": "no",
+             "createdAt": "2025-03-07T15:19:16.278Z",
+             "updatedAt": "2025-04-29T12:42:40.683Z",
+             "publishedAt": "2025-03-07T15:19:16.273Z"
+            }
+           }
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": 10625,
+     "attributes": {
+      "createdAt": "2025-04-29T12:43:02.488Z",
+      "Number": "04",
+      "Area": 168.2,
+      "SharedArea": 58.42,
+      "NumberOfBedrooms": 3,
+      "NumberOfBathrooms": 3,
+      "NumberOfRooms": 6,
+      "Price": 751000,
+      "Status": "Sold",
+      "Side": "North",
+      "Type": "D_F",
+      "ConstructionStartDate": "2025-11-21",
+      "ConstructionEndDate": "2027-11-15",
+      "ProjectStartData": "2024-10-06",
+      "ProjectEndDate": "2028-04-05",
+      "Notes": "note",
+      "SalePhase": 1,
+      "updatedAt": "2025-04-29T12:43:34.158Z",
+      "publishedAt": "2025-04-29T12:43:02.484Z",
+      "ApartmentName": "Al Baylasan",
+      "Duplex": 0,
+      "Balcony": 1,
+      "Block": 299,
+      "FeaturedOffer": "no",
+      "ExternalId": "299-A5-1-14",
+      "Floor": {
+       "data": [
+        {
+         "id": 1989,
+         "attributes": {
+          "FloorNumber": 1,
+          "createdAt": "2025-04-29T12:42:46.515Z",
+          "updatedAt": "2025-04-29T12:42:46.515Z",
+          "publishedAt": "2025-04-29T12:42:46.513Z",
+          "Building": {
+           "data": {
+            "id": 278,
+            "attributes": {
+             "Name": "Alfursan_A5V",
+             "Zone": "Zone_C",
+             "Project": "Alfursan",
+             "Disabled": "no",
+             "createdAt": "2025-03-07T15:19:16.278Z",
+             "updatedAt": "2025-04-29T12:42:40.683Z",
+             "publishedAt": "2025-03-07T15:19:16.273Z"
+            }
+           }
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": 10626,
+     "attributes": {
+      "createdAt": "2025-04-29T12:43:02.553Z",
+      "Number": "01",
+      "Area": 170.52,
+      "SharedArea": 59.22,
+      "NumberOfBedrooms": 3,
+      "NumberOfBathrooms": 3,
+      "NumberOfRooms": 6,
+      "Price": 762000,
+      "Status": "Sold",
+      "Side": "North",
+      "Type": "D_F",
+      "ConstructionStartDate": "2025-11-21",
+      "ConstructionEndDate": "2027-11-15",
+      "ProjectStartData": "2024-10-06",
+      "ProjectEndDate": "2028-04-05",
+      "Notes": "note",
+      "SalePhase": 1,
+      "updatedAt": "2025-04-29T12:43:34.221Z",
+      "publishedAt": "2025-04-29T12:43:02.549Z",
+      "ApartmentName": "Al Baylasan",
+      "Duplex": 0,
+      "Balcony": 1,
+      "Block": 299,
+      "FeaturedOffer": "no",
+      "ExternalId": "299-A5-2-21",
+      "Floor": {
+       "data": [
+        {
+         "id": 1990,
+         "attributes": {
+          "FloorNumber": 2,
+          "createdAt": "2025-04-29T12:42:46.574Z",
+          "updatedAt": "2025-04-29T12:42:46.574Z",
+          "publishedAt": "2025-04-29T12:42:46.573Z",
+          "Building": {
+           "data": {
+            "id": 278,
+            "attributes": {
+             "Name": "Alfursan_A5V",
+             "Zone": "Zone_C",
+             "Project": "Alfursan",
+             "Disabled": "no",
+             "createdAt": "2025-03-07T15:19:16.278Z",
+             "updatedAt": "2025-04-29T12:42:40.683Z",
+             "publishedAt": "2025-03-07T15:19:16.273Z"
+            }
+           }
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": 10627,
+     "attributes": {
+      "createdAt": "2025-04-29T12:43:02.612Z",
+      "Number": "02",
+      "Area": 171.1,
+      "SharedArea": 59.43,
+      "NumberOfBedrooms": 3,
+      "NumberOfBathrooms": 3,
+      "NumberOfRooms": 6,
+      "Price": 773000,
+      "Status": "Sold",
+      "Side": "North",
+      "Type": "D_F",
+      "ConstructionStartDate": "2025-11-21",
+      "ConstructionEndDate": "2027-11-15",
+      "ProjectStartData": "2024-10-06",
+      "ProjectEndDate": "2028-04-05",
+      "Notes": "note",
+      "SalePhase": 1,
+      "updatedAt": "2025-04-29T12:43:34.294Z",
+      "publishedAt": "2025-04-29T12:43:02.607Z",
+      "ApartmentName": "Al Baylasan",
+      "Duplex": 0,
+      "Balcony": 1,
+      "Block": 299,
+      "FeaturedOffer": "no",
+      "ExternalId": "299-A5-2-22",
+      "Floor": {
+       "data": [
+        {
+         "id": 1990,
+         "attributes": {
+          "FloorNumber": 2,
+          "createdAt": "2025-04-29T12:42:46.574Z",
+          "updatedAt": "2025-04-29T12:42:46.574Z",
+          "publishedAt": "2025-04-29T12:42:46.573Z",
+          "Building": {
+           "data": {
+            "id": 278,
+            "attributes": {
+             "Name": "Alfursan_A5V",
+             "Zone": "Zone_C",
+             "Project": "Alfursan",
+             "Disabled": "no",
+             "createdAt": "2025-03-07T15:19:16.278Z",
+             "updatedAt": "2025-04-29T12:42:40.683Z",
+             "publishedAt": "2025-03-07T15:19:16.273Z"
+            }
+           }
+          }
+         }
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "allBuildingsAndZones": [
+    {
+     "buildingName": "Alfursan_A4V",
+     "zoneName": "Zone_B"
+    },
+    {
+     "buildingName": "Alfursan_A5V",
+     "zoneName": "Zone_C"
+    },
+    {
+     "buildingName": "Alfursan_A6V",
+     "zoneName": "Zone_C"
+    },
+    {
+     "buildingName": "Alfursan_A7V",
+     "zoneName": "Zone_D"
+    },
+    {
+     "buildingName": "Alfursan_A8V",
+     "zoneName": "Zone_D"
+    },
+    {
+     "buildingName": "Alfursan_A9V",
+     "zoneName": "Zone_D"
+    },
+    {
+     "buildingName": "Alfursan_B3V",
+     "zoneName": "Zone_B"
+    },
+    {
+     "buildingName": "Alfursan_B4V",
+     "zoneName": "Zone_B"
+    },
+    {
+     "buildingName": "Alfursan_B5V",
+     "zoneName": "Zone_C"
+    },
+    {
+     "buildingName": "Alfursan_B6V",
+     "zoneName": "Zone_C"
+    },
+    {
+     "buildingName": "Alfursan_B7V",
+     "zoneName": "Zone_D"
+    },
+    {
+     "buildingName": "Alfursan_B8V",
+     "zoneName": "Zone_D"
+    },
+    {
+     "buildingName": "Alfursan_C3V",
+     "zoneName": "Zone_B"
+    },
+    {
+     "buildingName": "Alfursan_C4V",
+     "zoneName": "Zone_B"
+    },
+    {
+     "buildingName": "Alfursan_C5V",
+     "zoneName": "Zone_C"
+    },
+    {
+     "buildingName": "Alfursan_C6V",
+     "zoneName": "Zone_C"
+    },
+    {
+     "buildingName": "Alfursan_C7V",
+     "zoneName": "Zone_D"
+    },
+    {
+     "buildingName": "Alfursan_C8V",
+     "zoneName": "Zone_D"
+    }
+   ],
+   "totalApartmentCount": 384,
+   "fragmentedApartmentsCount": {
+    "option": "Zone_All",
+    "zoneName": "",
+    "apartmentCount": {
+     "Zone_C": 128,
+     "Zone_D": 144,
+     "Zone_B": 112
+    }
+   }
+  },
+  "__N_SSP": true
+ },
+ "page": "/[project]/[zone]",
+ "query": {
+  "project": "Alfursan",
+  "zone": "Zone_All"
+ },
+ "buildId": "6dHs-ciTj9jGqCyyiwF-s",
+ "isFallback": false,
+ "gssp": true,
+ "scriptLoader": []
+}
